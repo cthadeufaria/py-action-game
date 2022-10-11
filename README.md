@@ -15,7 +15,7 @@ This repository will contain all code regarding the "software project" curricula
 
 | Sprint |  Date  | Description                     |        Status        |
 |:------:|:------:|---------------------------------|:--------------------:|
-|   1    | Oct 16 | Use Case Diagram                |  :heavy_check_mark:  |
+|   1    | Oct 16 | Use Case Diagram                |      :warning:       |
 |   1    | Oct 16 | Product Vision + P. V. Board    |      :warning:       |
 |   1    | Oct 16 | Product Backlog (User Stories)  |         :x:          |
 |   1    | Oct 16 | Class Diagram                   |         :x:          |
@@ -45,7 +45,7 @@ This repository will contain all code regarding the "software project" curricula
  - PRs named after milestones
 
 ## Libraries
- - Tests: pytests
+ - Tests: pytest
  - User interface: pygame
  - Multithreading: multiprocessing
  - Bundling: pyinstaller
@@ -63,4 +63,6 @@ This repository will contain all code regarding the "software project" curricula
  - Scripting: Python
  - Diagrams: [Miro](https://miro.com/)
  - Project management: Gitlab wiki and issues
- - Art and UI Mockups: GIMP
+ - Wiki: Markdown
+ - UI Mockups: Moqups
+ - Art: GIMP
