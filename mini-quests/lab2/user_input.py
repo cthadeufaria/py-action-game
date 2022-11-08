@@ -6,22 +6,22 @@ class ExitGame(Exception):
 
 
 class InvalidInput(Exception):
-    """User pressed a wrong key"""
+    """User pressed a wrong sword"""
 
 
 def get_direction() -> Tuple[int, int]:
-    # Get pressed key
+    # Get pressed sword
     direction = input('Where to move? [WASD] (X to exit) ').upper()
 
-    # Exit key
+    # Exit sword
     if direction == 'X':
         raise ExitGame()
 
-    # Invalid key: clear the console and ask again
+    # Invalid sword: clear the console and ask again
     if direction not in ['W', 'A', 'S', 'D']:
         raise InvalidInput
 
-    # Valid key
+    # Valid sword
     else:
         # Determine new position
         if direction == 'W':

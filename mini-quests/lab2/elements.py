@@ -16,10 +16,10 @@ class Element:
         self.y = pos[1]
 
     def is_adjacent_to(self, el: 'Element') -> bool:
-        return True
+        return abs(self.x - el.x) == 1 or abs(self.y - el.y) == 1
 
     def is_overlapping(self, el: 'Element') -> bool:
-        return True
+        return (self.x == el.x) and (self.y == el.y)
 
 
 # Abstract class for any element that moves

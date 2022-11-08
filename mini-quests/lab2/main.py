@@ -61,107 +61,82 @@ class Dungeon:
         exit_pos = choice(available_positions)
         self.map[exit_pos[0]][exit_pos[1]] = 'E'
 
-
-class Game:
-    def __init__(self, N: int) -> None:
-        # Game state
-        self.is_over = False
-        self.dungeon = Dungeon(N)
-
-        # Initial positions
-        self.hero_pos = (1, 1)
-        self.key_pos = (N - 2, 1)
-        self.dragon_pos = (3, 1)
-
-        # hero state
-        self.has_key = False
-
-        # Draw elements' initial positions
-        self.dungeon.map[self.hero_pos[0]][self.hero_pos[1]] = 'H'
-        self.dungeon.map[self.dragon_pos[0]][self.dragon_pos[1]] = 'D'
-        self.dungeon.map[self.key_pos[0]][self.key_pos[1]] = 'K'
-
     # Display map in the terminal
     def show_map(self) -> None:
         os.system('clear')
-        for line in self.dungeon.map:
+        for line in self.map:
             print(' '.join(line))
         print('\n')
-
-    # Modify game state when the hero finds a key
-    def get_key(self) -> None:
-        self.has_key = True
-        self.dungeon.map[self.key_pos[0]][self.key_pos[1]] = ' '
-
-    # Main game loop
-    def move_hero(self) -> None:
-        try:
-            x_inc, y_inc = get_direction()
-        except InvalidInput:
-            self.show_map()
-        except ExitGame:
-            self.is_over = True
-
-            new_hero_pos = (self.hero.x + x_inc, self.hero.y + y_inc)
-            target_square = self.dungeon.get_element(new_hero_pos)
-
-            # Found an empty square
-            if target_square == ' ':
-                # Erase old pos
-                self.dungeon.remove_element(self.hero)
-
-                # Set new pos and draw hero
-                self.dungeon. = new_hero_pos
-                self.map[self.hero_pos[0]][self.hero_pos[1]] = 'H'
-                self.show_map()
-
-                # If there is a dragon nearby, the game is over
-                if self.map[self.hero_pos[0] + 1][self.hero_pos[1]] == 'D' or \
-                        self.map[self.hero_pos[0] - 1][self.hero_pos[1]] == 'D' or \
-                        self.map[self.hero_pos[0]][self.hero_pos[1] + 1] == 'D' or \
-                        self.map[self.hero_pos[0]][self.hero_pos[1] - 1] == 'D':
-                    print('\nThe dragon killed you!\n')
-                    self.is_over = True
-
-            # Found the key
-            elif target_square == 'K':
-                self.get_key()
-
-                # Erase old position
-                self.map[self.hero_pos[0]][self.hero_pos[1]] = ' '
-
-                # Set new pos and draw hero
-                self.hero_pos = new_hero_pos
-                self.map[self.hero_pos[0]][self.hero_pos[1]] = 'H'
-                self.show_map()
-
-            # Found the exit
-            elif target_square == 'E':
-                if self.has_key:
-                    self.is_over = True
-                    print('\nYou found the exit!\n')
-                else:
-                    self.show_map()
-
-            # Invalid movement
-            else:
-                self.show_map()
 
 
 if __name__ == '__main__':
     # Init game with size 10 and add hard-coded walls
-    game_instance = Game(10)
-    game_instance.add_walls((2, 2), 3, 2)
-    game_instance.add_walls((2, 6), 3, 2)
-    game_instance.add_walls((5, 2), 3, 1)
-    game_instance.add_walls((5, 6), 2, 1)
-    game_instance.add_walls((7, 2), 6, 1)
-    game_instance.add_exit()
-    game_instance.show_map()
+    dungeon = Dungeon(10)
+    dungeon.add_walls((2, 2), 3, 2)
+    dungeon.add_walls((2, 6), 3, 2)
+    dungeon.add_walls((5, 2), 3, 1)
+    dungeon.add_walls((5, 6), 2, 1)
+    dungeon.add_walls((7, 2), 6, 1)
+    dungeon.add_exit()
+    dungeon.show_map()
 
-    hero = Hero(symbol='🧔', pos=(4, 4))
-    dragon = Dragon(symbol='🐉', pos=(4, 4))
-    key = Element(symbol='🗡️', pos=(4, 4))
+    hero = Hero(symbol='H', pos=(4, 5))
+    dragon = Dragon(symbol='D', pos=(1, 1))
+    sword = Element(symbol='S', pos=(4, 4))
+    dungeon_exit = Element(symbol='E', pos=(0, 0))
 
-    while not game_instance.is_over:
-        game_instance.move_hero()
+    # Add elements to dungeon
+    [dungeon.add_element(x) for x in [
+        hero, dragon, sword, dungeon_exit
+    ]]
+
+    is_over = False
+    while not is_over:
+        try:
+            x_inc, y_inc = get_direction()
+
+            new_hero_pos = (hero.x + x_inc, hero.y + y_inc)
+            target_square = dungeon.get_element(new_hero_pos)
+
+            # Found an empty square
+            if target_square == ' ':
+                # Erase old pos
+                dungeon.remove_element(hero)
+
+                # Set new pos and draw hero
+                hero.set_pos(new_hero_pos)
+                dungeon.add_element(hero)
+
+                # If there is a dragon nearby, the game is over
+                if hero.is_adjacent_to(dragon):
+                    print('\nThe dragon killed you!\n')
+                    is_over = True
+
+                # Display updated map
+                else:
+                    dungeon.show_map()
+
+            # Found the sword
+            elif hero.is_overlapping(sword):
+                dungeon.remove_element(sword)
+                hero.has_sword = True
+                dungeon.add_element(hero)
+                dungeon.show_map()
+
+            # Found the exit
+            elif hero.is_overlapping(dungeon_exit):
+                if hero.has_sword:
+                    is_over = True
+                    print('\nYou found the exit!\n')
+                else:
+                    dungeon.show_map()
+
+            # Invalid movement
+            else:
+                dungeon.show_map()
+
+        except InvalidInput:
+            dungeon.show_map()
+
+        except ExitGame:
+            is_over = True
