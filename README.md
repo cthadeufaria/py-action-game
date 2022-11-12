@@ -13,28 +13,28 @@ This repository will contain all code regarding the "software project" curricula
 
 ## Roadmap
 
-| Sprint |  Date  | Description                     |        Status        |
-|:------:|:------:|---------------------------------|:--------------------:|
-|   1    | Oct 16 | Use Case Diagram                |      :warning:       |
-|   1    | Oct 16 | Product Vision + P. V. Board    |      :warning:       |
-|   1    | Oct 16 | Product Backlog (User Stories)  |         :x:          |
-|   1    | Oct 16 | Class Diagram                   |         :x:          |
-|   2    | Oct 30 | UI Mockups                      |         :x:          |
-|   2    | Oct 30 | Acceptance Tests                |         :x:          |
-|   2    | Oct 30 | Sprint #2 (review and planning) |         :x:          |
-|   3    | Oct 30 | Sprint #3 (review and planning) |         :x:          |
-|   4    | Nov 13 | Component/Package Diagram       |         :x:          |
-|   4    | Nov 13 | Deployment Diagram              |         :x:          |
-|   4    | Nov 13 | State Diagram                   |         :x:          |
-|   4    | Nov 13 | Sequence Diagram                |         :x:          |
-|   4    | Nov 13 | Sprint #4 (review and planning) |         :x:          |
-|   5    | Nov 27 | Source Code / Gitlab mng.       |         :x:          |
-|   5    | Nov 27 | Unit Tests                      |         :x:          |
-|   5    | Nov 27 | Sprint #5 (review and planning) |         :x:          |
-| Final  | Dec 11 | Installation Instructions       |         :x:          |
-| Final  | Dec 11 | User Manual                     |         :x:          |
-| Final  | Dec 11 | Product Complexity / Features   |         :x:          |
-| Final  | Dec 11 | Product Delivery (presentation) |         :x:          |
+| Sprint |  Date  | Description                     |       Status       |
+|:------:|:------:|---------------------------------|:------------------:|
+|   1    | Oct 16 | Use Case Diagram                | :heavy_check_mark: |
+|   1    | Oct 16 | Product Vision + P. V. Board    | :heavy_check_mark: |
+|   1    | Oct 16 | Product Backlog (User Stories)  | :heavy_check_mark: |
+|   1    | Oct 16 | Class Diagram                   | :heavy_check_mark: |
+|   2    | Oct 30 | UI Mockups                      | :heavy_check_mark: |
+|   2    | Oct 30 | Acceptance Tests                |     :warning:      |
+|   2    | Oct 30 | Sprint #2 (review and planning) | :heavy_check_mark: |
+|   3    | Oct 30 | Sprint #3 (review and planning) | :heavy_check_mark: |
+|   4    | Nov 13 | Component/Package Diagram       |        :x:         |
+|   4    | Nov 13 | Deployment Diagram              |        :x:         |
+|   4    | Nov 13 | State Diagram                   |        :x:         |
+|   4    | Nov 13 | Sequence Diagram                |        :x:         |
+|   4    | Nov 13 | Sprint #4 (review and planning) |        :x:         |
+|   5    | Nov 27 | Source Code / Gitlab mng.       |        :x:         |
+|   5    | Nov 27 | Unit Tests                      |        :x:         |
+|   5    | Nov 27 | Sprint #5 (review and planning) |        :x:         |
+| Final  | Dec 11 | Installation Instructions       |        :x:         |
+| Final  | Dec 11 | User Manual                     |        :x:         |
+| Final  | Dec 11 | Product Complexity / Features   |        :x:         |
+| Final  | Dec 11 | Product Delivery (presentation) |        :x:         |
 
 ## Contribution guide
  - Object-Oriented Programming

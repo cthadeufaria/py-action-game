@@ -1,3 +1,5 @@
+"""Script that formats all code with Black, does type checking with mypy and runs the Flake8 linter."""
+
 import os
 
 print("\nTESTING ALL FILES\n".center(24))
@@ -7,7 +9,7 @@ os.system("black .")
 print("\nDone!")
 
 print("\n 💪 Now checking types with mypy...\n")
-os.system("mypy .")
+os.system("mypy --strict .")
 print("\nDone!")
 mypy_ans = input("\n\t 🤔 Did it return any errors? [y/N] ")
 
