@@ -9,7 +9,7 @@ import pygame
 # Local imports
 import constants.colors
 import constants.screen
-import utils.math
+from game_lib.environment.game_data import GameData
 
 # Center window
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -26,31 +26,11 @@ font = pygame.font.Font("assets/wonder.ttf", 25)
 clock = pygame.time.Clock()
 
 # Entry point, game loop
-# TODO: this will be replaced with a function call. Ignore it for now
 if __name__ == "__main__":
-    game_over = False
-    FPS = 30
-    while not game_over:
-        # Check if user clicks X button in window
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_over = True
-
-        # Add rect to screen for testing purposes
-        pygame.draw.rect(
-            screen,
-            constants.colors.RED,
-            pygame.Rect(
-                *utils.math.get_center_coordinates(
-                    constants.screen.dimensions["medium"], 100, 50
-                ),
-                100,
-                50,
-            ),
-        )
-        pygame.display.flip()
-
-        # Keep a constant FPS rate
-        clock.tick(FPS)
-
-    pygame.quit()
+    game = GameData(
+        screen=screen,
+        clock=clock,
+        fps=constants.screen.FPS,
+        bg_color=constants.colors.GRAY,
+    )
+    game.game_loop()
