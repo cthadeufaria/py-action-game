@@ -1,5 +1,7 @@
 """Constants related to the screen resolution."""
 
+FPS = 30
+
 dimensions = {
     "tiny": (320, 240),
     "small": (640, 480),

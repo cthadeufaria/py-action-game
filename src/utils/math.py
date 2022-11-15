@@ -12,4 +12,4 @@ def get_center_coordinates(
     rectangle to be at the center of the screen.
 
     """
-    return int((screen_size[0] - width) / 2), int((screen_size[1] - height) / 2)
+    return (screen_size[0] - width) // 2, (screen_size[1] - height) // 2

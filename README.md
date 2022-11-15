@@ -38,31 +38,29 @@ This repository will contain all code regarding the "software project" curricula
 
 ## Contribution guide
  - Object-Oriented Programming
- - Test-driven development (pytest)
  - Always use type annotations
  - Use docstrings for classes and methods
  - One branch for each contributor, PRs should be reviewed by another maintainer
  - PRs named after milestones
 
 ## Libraries
- - Tests: pytest
  - User interface: pygame
  - Multithreading: multiprocessing
  - Bundling: pyinstaller
 
 ## DevOps
-[pre-commit](https://pre-commit.com/) hooks to ensure:
  - Code formatting with [Black](https://github.com/python/black)
  - Linting with [Flake8](http://flake8.pycqa.org/en/latest/) + Docstrings [extension](https://pypi.org/project/flake8-docstrings/)
  - Type checking with [mypy](http://mypy-lang.org/)
+ - Automatic documentation with [pdoc](https://pdoc.dev/)
 
 ## Tools
- - OS: Windows 11, Arch, Ubuntu
+ - OS: Arch, Ubuntu, Windows 11
  - IDE: PyCharm, VSCode
- - Shell: Powershell, Bash
+ - Shell: Bash, Powershell
  - Scripting: Python
  - Diagrams: [Miro](https://miro.com/)
  - Project management: Gitlab wiki and issues
  - Wiki: Markdown
- - UI Mockups: Moqups
+ - UI Mockups: Figma
  - Art: GIMP
