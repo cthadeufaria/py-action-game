@@ -1,6 +1,7 @@
 """Class that stores state of the game environment."""
 from typing import Tuple
 import pygame
+from game_lib.elements.element import Element
 
 
 class GameData:
@@ -94,6 +95,20 @@ class GameData:
                         self.temp_tile_size,
                     ),
                 )
+            test = pygame.Rect(
+                self.temp_particles_positions[p_idx][0],
+                self.temp_particles_positions[p_idx][1],
+                self.temp_tile_size,
+                self.temp_tile_size,
+            )
+            # Initialise Element
+            element = Element((320, 320), ["ball.png"], (128, 128))
+
+            # Question
+            for n in element.image:
+                self.screen.blit(element.image[n], element.position)
+
+            element.is_colliding(test)
 
             # Update screen with recently drawn elements
             pygame.display.flip()

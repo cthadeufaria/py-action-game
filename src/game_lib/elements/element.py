@@ -10,8 +10,6 @@ from utils.engine import load_png
 class Element(pygame.sprite.Sprite):
     """Base class for everything visible on the map."""
 
-    # question! Is image_paths really a list of strings? If yes: How to pass image_paths as list to self.image?
-    # question! Is it advisable to set dimensions through image_paths as in self.dimensions = screen.get_rect()?
     def __init__(
         self,
         position: Tuple[int, int],
@@ -20,11 +18,15 @@ class Element(pygame.sprite.Sprite):
     ) -> None:
         """Initialize Element instance."""
         pygame.sprite.Sprite.__init__(self)
+        self.rect: pygame.rect.Rect
         self.image_paths = image_paths
-        self.image, self.rect = load_png(image_paths[0])
         self.dimensions = dimensions
-        self.image = pygame.transform.scale(self.image, self.dimensions)
         self.position = position
+        self.image_list = []
+        for n in image_paths:
+            loaded_image, self.rect = load_png(n)
+            self.image_list.append(loaded_image)
+            self.image_list[-1] = pygame.transform.scale(self.image_list[-1], self.dimensions)
         self.rect.update(self.position, self.dimensions)
 
     def is_colliding(self, rect: pygame.rect.Rect) -> bool:
@@ -33,6 +35,12 @@ class Element(pygame.sprite.Sprite):
         point = pygame.mouse.get_pos()
         collision_point = self.rect.collidepoint(point)
         collision_rect = self.rect.colliderect(rect)
-        # print("Collision point = " + str(collision_point))
-        print("Collision point = " + str(collision_point))
-        return collision_rect
+        if collision_point or collision_rect:
+            print(
+                "Collision point " + str(collision_point) + "on " + str(self.position)
+            )
+            print("Collision rect " + str(collision_rect) + "on " + str(self.position))
+            collision = True
+        else:
+            collision = False
+        return collision
