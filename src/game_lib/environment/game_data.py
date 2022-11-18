@@ -1,7 +1,9 @@
 """Class that stores state of the game environment."""
 from typing import Tuple
 import pygame
+from .room import Room
 from ..elements.hero import Hero
+from random import choice
 
 
 class GameData:
@@ -28,7 +30,11 @@ class GameData:
         self.temp_map: list[list[str]] = [
             ["x" for _ in range(w // self.temp_tile_size)],
             *[
-                ["x", *[" " for _ in range(-2 + w // self.temp_tile_size)], "x"]
+                [
+                    "x",
+                    *[choice([" ", "x"]) for _ in range(-2 + w // self.temp_tile_size)],
+                    "x",
+                ]
                 for _ in range(-2 + h // self.temp_tile_size)
             ],
             ["x" for _ in range(w // self.temp_tile_size)],
@@ -37,7 +43,7 @@ class GameData:
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
         hero = Hero(
-            position=(10, 10),
+            position=(600, 300),
             image_paths=["bat.png"],
             dimensions=(50, 50),
             base_speed=2,
@@ -55,12 +61,11 @@ class GameData:
             self.screen.fill(self.bg_color)
 
             # Draw temp walls
+            walls = []
             for row_idx, row in enumerate(self.temp_map):
                 for col_idx, col in enumerate(row):
                     if col == "x":
-                        pygame.draw.rect(
-                            self.screen,
-                            "red",
+                        walls.append(
                             pygame.Rect(
                                 col_idx * self.temp_tile_size,
                                 row_idx * self.temp_tile_size,
@@ -68,6 +73,15 @@ class GameData:
                                 self.temp_tile_size,
                             ),
                         )
+
+            r = Room(walls)
+            r.position_walls(
+                self.screen,
+                (
+                    hero.rect.centerx - self.screen.get_size()[0] // 2,
+                    hero.rect.centery - self.screen.get_size()[1] // 2,
+                ),
+            )
 
             # Draw hero and update its position
             self.screen.blit(hero.image, hero.rect)
