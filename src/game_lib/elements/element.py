@@ -3,8 +3,11 @@ import pygame
 import sys
 from typing import Tuple
 
-sys.path.append("src")
-from utils.engine import load_png
+try:
+    sys.path.append("src")
+    from utils.engine import load_png
+except IndexError:
+    exit()
 
 
 class Element(pygame.sprite.Sprite):
@@ -19,6 +22,7 @@ class Element(pygame.sprite.Sprite):
         """Initialize Element instance."""
         pygame.sprite.Sprite.__init__(self)
         self.rect: pygame.rect.Rect
+        self.image: pygame.surface.Surface
         self.image_paths = image_paths
         self.dimensions = dimensions
         self.position = position
@@ -26,12 +30,13 @@ class Element(pygame.sprite.Sprite):
         for n in image_paths:
             loaded_image, self.rect = load_png(n)
             self.image_list.append(loaded_image)
-            self.image_list[-1] = pygame.transform.scale(self.image_list[-1], self.dimensions)
+            self.image_list[-1] = pygame.transform.scale(
+                self.image_list[-1], self.dimensions
+            )
         self.rect.update(self.position, self.dimensions)
 
     def is_colliding(self, rect: pygame.rect.Rect) -> bool:
-        # collision_rect = self.rect.colliderect(any_rect)
-        # testing collision with cursor
+        """Check if element's rect is colliding."""
         point = pygame.mouse.get_pos()
         collision_point = self.rect.collidepoint(point)
         collision_rect = self.rect.colliderect(rect)

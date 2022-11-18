@@ -11,7 +11,7 @@ class Enemy(LivingElement):
         position: Tuple[int, int],
         image_paths: list[str],
         dimensions: Tuple[int, int],
-        base_speed: float,
+        base_speed: int,
         velocity: Tuple[int, int],
     ) -> None:
         """Initialize Enemy instance."""

@@ -11,7 +11,7 @@ class MovingElement(Element):
         position: Tuple[int, int],
         image_paths: list[str],
         dimensions: Tuple[int, int],
-        base_speed: float,
+        base_speed: int,
         velocity: Tuple[int, int],
     ) -> None:
         """Initialize MovingElement instance."""
@@ -20,7 +20,10 @@ class MovingElement(Element):
         super().__init__(position, image_paths, dimensions)
 
     def move(self) -> None:
-        movement = list()  # type: list[float]
+        """Update the position of rect based on current velocity."""
         dx = self.base_speed * self.velocity[0]
         dy = self.base_speed * self.velocity[1]
-        self.rect.move(dx, dy)
+        self.rect.center = (
+            self.rect.center[0] + dx,
+            self.rect.center[1] + dy,
+        )

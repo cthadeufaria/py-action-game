@@ -1,7 +1,9 @@
 """Class that stores state of the game environment."""
 from typing import Tuple
 import pygame
-from game_lib.elements.element import Element
+from .room import Room
+from ..elements.hero import Hero
+from random import choice
 
 
 class GameData:
@@ -28,28 +30,26 @@ class GameData:
         self.temp_map: list[list[str]] = [
             ["x" for _ in range(w // self.temp_tile_size)],
             *[
-                ["x", *[" " for _ in range(-2 + w // self.temp_tile_size)], "x"]
+                [
+                    "x",
+                    *[choice([" ", "x"]) for _ in range(-2 + w // self.temp_tile_size)],
+                    "x",
+                ]
                 for _ in range(-2 + h // self.temp_tile_size)
             ],
             ["x" for _ in range(w // self.temp_tile_size)],
         ]
 
-        # Generate temp particles
-        from random import random
-
-        self.temp_particles_positions = [
-            [
-                self.temp_tile_size + int(random() * w),
-                self.temp_tile_size + int(random() * h),
-            ]
-            for _ in range(20)
-        ]
-        self.temp_particle_velocities = [
-            ((random() - 0.5) * 4, (random() - 0.5) * 4) for _ in range(20)
-        ]
-
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
+        hero = Hero(
+            position=(600, 300),
+            image_paths=["bat.png"],
+            dimensions=(50, 50),
+            base_speed=2,
+            velocity=(0, 0),
+        )
+
         game_ended = False
         while not game_ended:
             for event in pygame.event.get():
@@ -61,12 +61,11 @@ class GameData:
             self.screen.fill(self.bg_color)
 
             # Draw temp walls
+            walls = []
             for row_idx, row in enumerate(self.temp_map):
                 for col_idx, col in enumerate(row):
                     if col == "x":
-                        pygame.draw.rect(
-                            self.screen,
-                            "red",
+                        walls.append(
                             pygame.Rect(
                                 col_idx * self.temp_tile_size,
                                 row_idx * self.temp_tile_size,
@@ -75,40 +74,19 @@ class GameData:
                             ),
                         )
 
-            # Update particles positions
-            for p_idx in range(20):
-                self.temp_particles_positions[p_idx][
-                    0
-                ] += self.temp_particle_velocities[p_idx][0]
-                self.temp_particles_positions[p_idx][
-                    1
-                ] += self.temp_particle_velocities[p_idx][1]
-
-                # Draw particles
-                pygame.draw.rect(
-                    self.screen,
-                    "blue",
-                    pygame.Rect(
-                        self.temp_particles_positions[p_idx][0],
-                        self.temp_particles_positions[p_idx][1],
-                        self.temp_tile_size,
-                        self.temp_tile_size,
-                    ),
-                )
-            test = pygame.Rect(
-                self.temp_particles_positions[p_idx][0],
-                self.temp_particles_positions[p_idx][1],
-                self.temp_tile_size,
-                self.temp_tile_size,
+            r = Room(walls)
+            r.position_walls(
+                self.screen,
+                (
+                    hero.rect.centerx - self.screen.get_size()[0] // 2,
+                    hero.rect.centery - self.screen.get_size()[1] // 2,
+                ),
             )
-            # Initialise Element
-            element = Element((320, 320), ["ball.png"], (128, 128))
 
-            # Question
-            for n in element.image:
-                self.screen.blit(element.image[n], element.position)
-
-            element.is_colliding(test)
+            # Draw hero and update its position
+            self.screen.blit(hero.image, hero.rect)
+            hero.get_input()
+            hero.move()
 
             # Update screen with recently drawn elements
             pygame.display.flip()
