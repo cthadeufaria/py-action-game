@@ -6,4 +6,3 @@ class GameData:
 
     def __init__(self) -> None:
         """Initialize GameData instance."""
-        pass
