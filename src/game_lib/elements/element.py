@@ -3,8 +3,11 @@ import pygame
 import sys
 from typing import Tuple
 
-sys.path.append("src")
-from utils.engine import load_png
+try:
+    sys.path.append("src")
+    from utils.engine import load_png
+except IndexError:
+    exit()
 
 
 class Element(pygame.sprite.Sprite):
@@ -21,6 +24,8 @@ class Element(pygame.sprite.Sprite):
         """Initialize Element instance."""
         pygame.sprite.Sprite.__init__(self)
         self.image_paths = image_paths
+        self.image: pygame.surface.Surface
+        self.rect: pygame.rect.Rect
         self.image, self.rect = load_png(image_paths[0])
         self.dimensions = dimensions
         self.image = pygame.transform.scale(self.image, self.dimensions)
@@ -28,6 +33,7 @@ class Element(pygame.sprite.Sprite):
         self.rect.update(self.position, self.dimensions)
 
     def is_colliding(self, any_rect: pygame.Rect) -> bool:
+        """Verify if element is colliding with a rect."""
         collision_rect = self.rect.colliderect(any_rect)
         # testing collision with cursor
         point = pygame.mouse.get_pos()
@@ -37,15 +43,15 @@ class Element(pygame.sprite.Sprite):
         return collision_rect
 
 
-def main():
+def main() -> None:
+    """Test function for Element class."""
     # Initialise screen
     pygame.init()
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("Basic Pong")
 
     # Fill background
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
+    background = pygame.Surface(screen.get_size()).convert()
     background.fill((0, 0, 0))
 
     # Initialise Element
