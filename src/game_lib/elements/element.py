@@ -27,50 +27,12 @@ class Element(pygame.sprite.Sprite):
         self.position = position
         self.rect.update(self.position, self.dimensions)
 
-    def is_colliding(self, any_rect: pygame.Rect) -> bool:
-        collision_rect = self.rect.colliderect(any_rect)
+    def is_colliding(self, rect: pygame.rect.Rect) -> bool:
+        # collision_rect = self.rect.colliderect(any_rect)
         # testing collision with cursor
         point = pygame.mouse.get_pos()
         collision_point = self.rect.collidepoint(point)
-        if collision_point:
-            self.rect.update((320, 320), (320, 320))
+        collision_rect = self.rect.colliderect(rect)
+        # print("Collision point = " + str(collision_point))
+        print("Collision point = " + str(collision_point))
         return collision_rect
-
-
-def main():
-    # Initialise screen
-    pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    pygame.display.set_caption("Basic Pong")
-
-    # Fill background
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill((0, 0, 0))
-
-    # Initialise Element
-    element = Element((320, 320), ["ball.png"], (128, 128))
-
-    # Initialise sprites
-    elementsprite = pygame.sprite.RenderPlain(element)
-
-    # Blit everything to the screen
-    screen.blit(background, (0, 0))
-    pygame.display.flip()
-
-    # Initialise clock
-    clock = pygame.time.Clock()
-
-    # Event loop
-    while True:
-        # Make sure game doesn't run at more than 60 frames per second
-        clock.tick(60)
-
-        screen.blit(background, element.rect, element.rect)
-        elementsprite.update()
-        elementsprite.draw(screen)
-        pygame.display.flip()
-
-
-if __name__ == "__main__":
-    main()
