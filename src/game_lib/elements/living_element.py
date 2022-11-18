@@ -19,6 +19,7 @@ class LivingElement(MovingElement):
         idle_image: str,
     ) -> None:
         """Initialize LivingElement instance."""
+        self.is_dead: bool
         self.health_points = health_points
         self.damage_image = damage_image
         self.idle_image = idle_image
@@ -28,18 +29,17 @@ class LivingElement(MovingElement):
         """Attacks enemies."""
         pass
 
-    def is_dead(
-        self, rect: pygame.rect.Rect, attack_force: int, is_attack: bool
-    ) -> bool:
-        """Check if dead and decrease health points."""
-        if self.is_colliding(rect) and is_attack:
+    def check_attack(
+        self, rect: pygame.rect.Rect, attack_force: int
+    ) -> None:
+        """Check if attacked and decrease health points."""
+        if self.is_colliding(rect):
             self.health_points += attack_force
         if self.health_points <= 0:
             self.health_points = 0
-            is_dead = True
+            self.is_dead = True
         else:
-            is_dead = False
-        return is_dead
+            self.is_dead = False
 
     def heal(self, hp: int) -> None:
         """Heal living element increasing health points."""
