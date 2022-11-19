@@ -24,6 +24,7 @@ class LivingElement(MovingElement):
         super().__init__(position, image_paths, dimensions, base_speed, velocity)
 
     def attack(self) -> None:
+
         pass
 
     def damaged(self) -> int:
