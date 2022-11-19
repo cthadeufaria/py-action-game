@@ -6,7 +6,6 @@ import pygame
 
 class LivingElement(MovingElement):
     """Any MovingElement that has health points."""
-
     def __init__(
         self,
         position: Tuple[int, int],
@@ -26,12 +25,10 @@ class LivingElement(MovingElement):
         super().__init__(position, image_paths, dimensions, base_speed, velocity)
 
     def attack(self) -> None:
-        """Attacks enemies."""
+        """Attack enemies."""
         pass
 
-    def check_attack(
-        self, rect: pygame.rect.Rect, attack_force: int
-    ) -> None:
+    def check_attack(self, rect: pygame.rect.Rect, attack_force: int) -> None:
         """Check if attacked and decrease health points."""
         if self.is_colliding(rect):
             self.health_points += attack_force

@@ -15,9 +15,27 @@ class Hero(LivingElement):
         dimensions: Tuple[int, int],
         base_speed: int,
         velocity: Tuple[int, int],
+        health_points: int,
+        damage_image: str,
+        idle_image: str,
     ) -> None:
         """Initialize Hero instance."""
-        super().__init__(position, image_paths, dimensions, base_speed, velocity)
+        super().__init__(
+            position,
+            image_paths,
+            dimensions,
+            base_speed,
+            velocity,
+            health_points,
+            damage_image,
+            idle_image,
+        )
+
+    def equip(self, eq_number: int) -> None:
+        """Equip equipable to use."""
+        self.inventory: list[object]
+        self.current_weapon = self.inventory[eq_number]
+        pass
 
     def get_input(self) -> None:
         """Change speed velocity based on keys pressed."""
