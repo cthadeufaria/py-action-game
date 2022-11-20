@@ -18,6 +18,7 @@ class Hero(LivingElement):
     ) -> None:
         """Initialize Hero instance."""
         super().__init__(position, image_paths, dimensions, base_speed, velocity)
+        self.going_left = False
 
     def get_input(self) -> None:
         """Change speed velocity based on keys pressed."""
@@ -33,12 +34,17 @@ class Hero(LivingElement):
         # Allow moving with WASD or arrow keys
         if keys[pygame.K_UP or pygame.K_w]:
             vy = -mod_speed
+            # TODO: set integer value to select image in array
+            self.going_left = False
         if keys[pygame.K_RIGHT or pygame.K_d]:
             vx = mod_speed
+            self.going_left = False
         if keys[pygame.K_DOWN or pygame.K_s]:
             vy = mod_speed
+            self.going_left = False
         if keys[pygame.K_LEFT or pygame.K_a]:
             vx = -mod_speed
+            self.going_left = True
 
         # Assign velocity, and normalize if necessary
         self.velocity = (vx, vy)

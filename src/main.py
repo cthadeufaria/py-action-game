@@ -31,6 +31,6 @@ if __name__ == "__main__":
         screen=screen,
         clock=clock,
         fps=constants.screen.FPS,
-        bg_color=constants.colors.GRAY,
+        bg_color=constants.colors.GRASS,
     )
     game.game_loop()
