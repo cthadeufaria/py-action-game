@@ -6,6 +6,7 @@ import pygame
 
 class LivingElement(MovingElement):
     """Any MovingElement that has health points."""
+
     def __init__(
         self,
         position: Tuple[int, int],
@@ -19,6 +20,7 @@ class LivingElement(MovingElement):
     ) -> None:
         """Initialize LivingElement instance."""
         self.is_dead: bool
+        self.is_attack: bool
         self.health_points = health_points
         self.damage_image = damage_image
         self.idle_image = idle_image
@@ -28,10 +30,12 @@ class LivingElement(MovingElement):
         """Attack enemies."""
         pass
 
-    def check_attack(self, rect: pygame.rect.Rect, attack_force: int) -> None:
+    def check_attack(
+        self, rect: pygame.rect.Rect, attack_force: int, is_attack: bool
+    ) -> None:
         """Check if attacked and decrease health points."""
-        if self.is_colliding(rect):
-            self.health_points += attack_force
+        if self.is_colliding(rect) and is_attack:
+            self.health_points -= attack_force
         if self.health_points <= 0:
             self.health_points = 0
             self.is_dead = True

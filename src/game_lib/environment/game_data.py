@@ -48,6 +48,9 @@ class GameData:
             dimensions=(50, 50),
             base_speed=2,
             velocity=(0, 0),
+            health_points=100,
+            damage_image="bat.png",
+            idle_image="bat.png",
         )
 
         game_ended = False
