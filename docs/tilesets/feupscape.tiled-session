@@ -1,0 +1,51 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "feup_map2.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "feup_map.tmx#buildings": {
+            "dynamicWrapping": true
+        },
+        "feup_map.tmx#feupscape_tileset": {
+            "dynamicWrapping": false
+        },
+        "feup_map2.tmx": {
+            "scale": 0.21760135135135134,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2959.54044403043,
+                "y": 801.9251668995498
+            }
+        },
+        "feup_map2.tmx#buildings": {
+            "scaleInDock": 1
+        },
+        "feup_map2.tmx#feupscape_tileset": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "/home/nick/repos/psw/docs/tilesets",
+    "last.imagePath": "/home/nick/repos/psw/docs/tilesets",
+    "map.height": 50,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 800,
+    "openFiles": [
+        "feup_map2.tmx"
+    ],
+    "project": "feupscape.tiled-project",
+    "recentFiles": [
+        "feup_map2.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 1600,
+        "width": 5935
+    },
+    "tileset.type": 0
+}
