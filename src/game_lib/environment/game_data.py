@@ -25,9 +25,12 @@ class GameData:
         self.hero = Hero(
             position=(800, 500),
             image_paths=["orc.png"],
-            dimensions=(3*20, 3*32),
+            dimensions=(3 * 20, 3 * 32),
             base_speed=3,
             velocity=(0, 0),
+            health_points=15,
+            damage_image="orc_dmg.png",
+            idle_image="orc.png",
         )
 
         # Get screen dimensions
@@ -66,7 +69,6 @@ class GameData:
 
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
-
         game_ended = False
         while not game_ended:
             for event in pygame.event.get():
@@ -82,7 +84,9 @@ class GameData:
 
             # Draw hero and update its position
             if self.hero.going_left:
-                self.draw(pygame.transform.flip(self.hero.image, True, False), self.hero.rect)
+                self.draw(
+                    pygame.transform.flip(self.hero.image, True, False), self.hero.rect
+                )
             else:
                 self.draw(self.hero.image, self.hero.rect)
             self.hero.get_input()
@@ -101,7 +105,11 @@ class GameData:
         self.screen.blit(
             image,
             (
-                rect.topleft[0] - self.hero.rect.centerx + self.screen.get_size()[0] // 2,
-                rect.topleft[1] - self.hero.rect.centery + self.screen.get_size()[1] // 2,
+                rect.topleft[0]
+                - self.hero.rect.centerx
+                + self.screen.get_size()[0] // 2,
+                rect.topleft[1]
+                - self.hero.rect.centery
+                + self.screen.get_size()[1] // 2,
             ),
         )

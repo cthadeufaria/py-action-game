@@ -37,4 +37,6 @@ class Room:
         for wall in self.walls:
             wall = wall.move(wall.topleft[0] - pos_offset[0], wall.topleft[1] - pos_offset[1])  # type: ignore
             # screen.blit image
-            pygame.draw.rect(screen, "red", wall)  # TEMPORARY red for debugging purposes
+            pygame.draw.rect(
+                screen, "red", wall
+            )  # TEMPORARY red for debugging purposes

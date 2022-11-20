@@ -13,8 +13,6 @@ except IndexError:
 class Element(pygame.sprite.Sprite):
     """Base class for everything visible on the map."""
 
-    # question! Is image_paths really a list of strings? If yes: How to pass image_paths as list to self.image?
-    # question! Is it advisable to set dimensions through image_paths as in self.dimensions = screen.get_rect()?
     def __init__(
         self,
         position: Tuple[int, int],
@@ -23,60 +21,32 @@ class Element(pygame.sprite.Sprite):
     ) -> None:
         """Initialize Element instance."""
         pygame.sprite.Sprite.__init__(self)
-        self.image_paths = image_paths
-        self.image: pygame.surface.Surface
         self.rect: pygame.rect.Rect
-        self.image, self.rect = load_png(image_paths[0])
+        self.image: pygame.surface.Surface
+        self.image_paths = image_paths
         self.dimensions = dimensions
-        self.image = pygame.transform.scale(self.image, self.dimensions)
         self.position = position
+        self.image_list = []
+        for n in image_paths:
+            loaded_image, self.rect = load_png(n)
+            self.image_list.append(loaded_image)
+            self.image_list[-1] = pygame.transform.scale(
+                self.image_list[-1], self.dimensions
+            )
+        self.image = self.image_list[0]
         self.rect.update(self.position, self.dimensions)
 
-    def is_colliding(self, any_rect: pygame.Rect) -> bool:
-        """Verify if element is colliding with a rect."""
-        collision_rect = self.rect.colliderect(any_rect)
-        # testing collision with cursor
+    def is_colliding(self, rect: pygame.rect.Rect) -> bool:
+        """Check if element's rect is colliding."""
         point = pygame.mouse.get_pos()
         collision_point = self.rect.collidepoint(point)
-        if collision_point:
-            self.rect.update((320, 320), (320, 320))
-        return collision_rect
-
-
-def main() -> None:
-    """Test function for Element class."""
-    # Initialise screen
-    pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    pygame.display.set_caption("Basic Pong")
-
-    # Fill background
-    background = pygame.Surface(screen.get_size()).convert()
-    background.fill((0, 0, 0))
-
-    # Initialise Element
-    element = Element((320, 320), ["ball.png"], (128, 128))
-
-    # Initialise sprites
-    elementsprite = pygame.sprite.RenderPlain(element)
-
-    # Blit everything to the screen
-    screen.blit(background, (0, 0))
-    pygame.display.flip()
-
-    # Initialise clock
-    clock = pygame.time.Clock()
-
-    # Event loop
-    while True:
-        # Make sure game doesn't run at more than 60 frames per second
-        clock.tick(60)
-
-        screen.blit(background, element.rect, element.rect)
-        elementsprite.update()
-        elementsprite.draw(screen)
-        pygame.display.flip()
-
-
-if __name__ == "__main__":
-    main()
+        collision_rect = self.rect.colliderect(rect)
+        if collision_point or collision_rect:
+            print(
+                "Collision point " + str(collision_point) + "on " + str(self.position)
+            )
+            print("Collision rect " + str(collision_rect) + "on " + str(self.position))
+            collision = True
+        else:
+            collision = False
+        return collision

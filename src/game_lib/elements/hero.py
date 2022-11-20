@@ -1,6 +1,7 @@
 """A LivingElement controlled by the player."""
 from typing import Tuple
 from .living_element import LivingElement
+from .equipable import Equipable
 import pygame.key
 from math import sqrt
 
@@ -15,10 +16,28 @@ class Hero(LivingElement):
         dimensions: Tuple[int, int],
         base_speed: int,
         velocity: Tuple[int, int],
+        health_points: int,
+        damage_image: str,
+        idle_image: str,
     ) -> None:
         """Initialize Hero instance."""
-        super().__init__(position, image_paths, dimensions, base_speed, velocity)
+        super().__init__(
+            position,
+            image_paths,
+            dimensions,
+            base_speed,
+            velocity,
+            health_points,
+            damage_image,
+            idle_image,
+        )
         self.going_left = False
+        self.current_weapon = Equipable(position, ["ball.png"], (10, 10), 0.1, 1, 1)
+        self.inventory: list[Equipable] = []
+
+    def equip(self, eq_number: int) -> None:
+        """Equip equipable to use."""
+        self.current_weapon = self.inventory[eq_number]
 
     def get_input(self) -> None:
         """Change speed velocity based on keys pressed."""
