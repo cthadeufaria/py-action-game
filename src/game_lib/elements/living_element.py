@@ -34,7 +34,7 @@ class LivingElement(MovingElement):
     ) -> None:
         """Check if attacked and decrease health points."""
         if self.is_colliding(rect) and is_attack:
-            self.health_points += -attack_force
+            self.health_points -= attack_force
         if self.health_points <= 0:
             self.health_points = 0
             self.is_dead = True
