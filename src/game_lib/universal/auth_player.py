@@ -22,7 +22,9 @@ class AuthPlayer:
         self.ranking = ranking
 
     def subscribe_to_ranking(self) -> None:
+        """Create snapshot listener to Firestore ranking doc."""
         pass
 
     def update_player_data(self, points: int, pos: Tuple[int, int]) -> None:
+        """Update player's points in Firestore ranking doc."""
         pass

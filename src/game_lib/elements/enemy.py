@@ -1,8 +1,15 @@
 """Any LivingElement that can attack and be attacked by a Hero."""
+import sys
 from typing import Tuple
 from random import randint, random
 from .living_element import LivingElement
 from .hero import Hero
+
+try:
+    sys.path.append("src")
+    from utils.math import check_inside_circle
+except IndexError:
+    exit()
 
 
 class Enemy(LivingElement):
@@ -42,7 +49,9 @@ class Enemy(LivingElement):
     def update_movement(self, hero: Hero) -> None:
         """Update enemy's position depending on its attributes."""
         # If enemy is a follower and player is inside radius, go towards player
-        if self.is_follower and check_inside_circle(hero.rect.center, self.initial_pos, self.walking_radius):
+        if self.is_follower and check_inside_circle(
+            hero.rect.center, self.initial_pos, self.walking_radius
+        ):
             self.target = (hero.rect.centerx, hero.rect.centery)
 
         # If enemy is a wanderer or player is outside radius, walk randomly inside radius
@@ -71,11 +80,3 @@ class Enemy(LivingElement):
         )
 
         self.move()
-
-
-# CODE DUPLICATION - TODO: import from math.py utils file
-def check_inside_circle(
-    point: Tuple[int, int], center: Tuple[int, int], radius: int
-) -> bool:
-    """Determine if a circle defined by its center and radius contains a point."""
-    return ((point[0] - center[0]) ** 2 + (point[1] - center[1]) ** 2) <= (radius**2)

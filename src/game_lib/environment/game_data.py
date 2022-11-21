@@ -44,7 +44,7 @@ class GameData:
                 position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                 image_paths=["bat.png", "bat_dmg.png"],
                 dimensions=(40, 40),
-                base_speed=randint(4, 10),
+                base_speed=randint(5, 12),
                 health_points=10,
                 damage_image="bat_dmg.png",
                 idle_image="bat.png",
@@ -101,7 +101,7 @@ class GameData:
             self.draw(self.game_room.map_surface, self.game_room.map_rect)
 
             # Draw hero and update its position
-            if self.hero.going_left:
+            if self.hero.is_going_left:
                 self.draw(
                     pygame.transform.flip(self.hero.image, True, False), self.hero.rect
                 )
@@ -110,10 +110,14 @@ class GameData:
             self.hero.get_input()
             self.hero.move()
 
-            # Draw and update enemies
+            # For each enemy
             for enemy in self.enemies:
+                # Draw and update it
                 self.draw(enemy.image, enemy.rect)
                 enemy.update_movement(self.hero)
+
+                # Check for attacks against hero
+                self.hero.check_attack(enemy, enemy.attack_force)
 
             # Update screen with recently drawn elements
             pygame.display.flip()

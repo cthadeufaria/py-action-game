@@ -29,7 +29,8 @@ class Hero(LivingElement):
             damage_image,
             idle_image,
         )
-        self.going_left = False
+        self.is_attacking = False
+        self.is_going_left = False
         self.current_weapon = Equipable(position, ["ball.png"], (10, 10), 0.1, 1, 1)
         self.inventory: list[Equipable] = []
 
@@ -52,16 +53,16 @@ class Hero(LivingElement):
         if keys[pygame.K_UP or pygame.K_w]:
             vy = -mod_speed
             # TODO: set integer value to select image in array
-            self.going_left = False
+            self.is_going_left = False
         if keys[pygame.K_RIGHT or pygame.K_d]:
             vx = mod_speed
-            self.going_left = False
+            self.is_going_left = False
         if keys[pygame.K_DOWN or pygame.K_s]:
             vy = mod_speed
-            self.going_left = False
+            self.is_going_left = False
         if keys[pygame.K_LEFT or pygame.K_a]:
             vx = -mod_speed
-            self.going_left = True
+            self.is_going_left = True
 
         # Assign velocity, and normalize if necessary
         self.velocity = (vx, vy)
