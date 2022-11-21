@@ -12,11 +12,10 @@ class MovingElement(Element):
         image_paths: list[str],
         dimensions: Tuple[int, int],
         base_speed: int,
-        velocity: Tuple[int, int],
     ) -> None:
         """Initialize MovingElement instance."""
         self.base_speed = base_speed
-        self.velocity = velocity
+        self.velocity = (0, 0)
         super().__init__(position, image_paths, dimensions)
 
     def move(self) -> None:

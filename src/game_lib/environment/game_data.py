@@ -3,7 +3,8 @@ from typing import Tuple
 import pygame
 from .room import Room
 from ..elements.hero import Hero
-from random import choice
+from ..elements.enemy import Enemy
+from random import choice, randint, random
 
 
 class GameData:
@@ -27,7 +28,6 @@ class GameData:
             image_paths=["orc.png"],
             dimensions=(3 * 20, 3 * 32),
             base_speed=3,
-            velocity=(0, 0),
             health_points=15,
             damage_image="orc_dmg.png",
             idle_image="orc.png",
@@ -36,6 +36,24 @@ class GameData:
         # Get screen dimensions
         w, h = pygame.display.get_surface().get_size()
         self.temp_tile_size = 10
+
+        # Initialize 10 randomly instantiated enemies
+        # TODO: perhaps select difficulty level at the beginning and generate more/less enemies
+        self.enemies = [
+            Enemy(
+                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                image_paths=["bat.png", "bat_dmg.png"],
+                dimensions=(40, 40),
+                base_speed=randint(4, 10),
+                health_points=10,
+                damage_image="bat_dmg.png",
+                idle_image="bat.png",
+                attack_force=5,
+                rarity=0.5,
+                is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+            )
+            for _ in range(10)
+        ]
 
         # Generate temp map
         temp_map: list[list[str]] = [
@@ -91,6 +109,11 @@ class GameData:
                 self.draw(self.hero.image, self.hero.rect)
             self.hero.get_input()
             self.hero.move()
+
+            # Draw and update enemies
+            for enemy in self.enemies:
+                self.draw(enemy.image, enemy.rect)
+                enemy.update_movement(self.hero)
 
             # Update screen with recently drawn elements
             pygame.display.flip()

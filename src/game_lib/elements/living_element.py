@@ -13,13 +13,12 @@ class LivingElement(MovingElement):
         image_paths: list[str],
         dimensions: Tuple[int, int],
         base_speed: int,
-        velocity: Tuple[int, int],
         health_points: int,
         damage_image: str,
         idle_image: str,
     ) -> None:
         """Initialize LivingElement instance."""
-        super().__init__(position, image_paths, dimensions, base_speed, velocity)
+        super().__init__(position, image_paths, dimensions, base_speed)
         self.is_dead = False
         self.health_points = health_points
         self.damage_image = damage_image

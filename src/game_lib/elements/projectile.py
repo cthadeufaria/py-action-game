@@ -17,4 +17,5 @@ class Projectile(MovingElement):
     ) -> None:
         """Initialize Projectile instance."""
         self.attack_force = attack_force
-        super().__init__(position, image_paths, dimensions, base_speed, velocity)
+        super().__init__(position, image_paths, dimensions, base_speed)
+        self.velocity = velocity
