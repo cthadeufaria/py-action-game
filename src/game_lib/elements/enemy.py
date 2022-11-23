@@ -27,6 +27,7 @@ class Enemy(LivingElement):
         attack_force: int,
         rarity: float,
         is_follower: bool,
+        attack_image: str,
     ) -> None:
         """Initialize Enemy instance."""
         super().__init__(
@@ -37,6 +38,7 @@ class Enemy(LivingElement):
             health_points,
             damage_image,
             idle_image,
+            attack_image,
         )
         self.attack_force = attack_force
         self.rarity = rarity

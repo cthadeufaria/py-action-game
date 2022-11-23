@@ -18,6 +18,7 @@ class Hero(LivingElement):
         health_points: int,
         damage_image: str,
         idle_image: str,
+        attack_image: str,
     ) -> None:
         """Initialize Hero instance."""
         super().__init__(
@@ -28,6 +29,7 @@ class Hero(LivingElement):
             health_points,
             damage_image,
             idle_image,
+            attack_image,
         )
         self.is_attacking = False
         self.is_going_left = False
@@ -44,25 +46,33 @@ class Hero(LivingElement):
 
         # Press period key to run
         mod_speed = self.base_speed
-        if keys[pygame.K_PERIOD]:
+        if keys[pygame.K_SPACE]:
             mod_speed *= 2
 
         vx, vy = 0, 0
 
         # Allow moving with WASD or arrow keys
-        if keys[pygame.K_UP or pygame.K_w]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             vy = -mod_speed
             # TODO: set integer value to select image in array
             self.is_going_left = False
-        if keys[pygame.K_RIGHT or pygame.K_d]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             vx = mod_speed
             self.is_going_left = False
-        if keys[pygame.K_DOWN or pygame.K_s]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             vy = mod_speed
             self.is_going_left = False
-        if keys[pygame.K_LEFT or pygame.K_a]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             vx = -mod_speed
             self.is_going_left = True
+
+        # Verify if hero wants to attack
+        self.is_attacking = keys[pygame.K_v]
+
+        if self.is_attacking:
+            self.image = self.attack_image
+        else:
+            self.image = self.idle_image
 
         # Assign velocity, and normalize if necessary
         self.velocity = (vx, vy)

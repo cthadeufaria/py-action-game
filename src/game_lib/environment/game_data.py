@@ -31,6 +31,7 @@ class GameData:
             health_points=15,
             damage_image="orc_dmg.png",
             idle_image="orc.png",
+            attack_image="orc_atk.png",
         )
 
         # Get screen dimensions
@@ -48,7 +49,8 @@ class GameData:
                 health_points=10,
                 damage_image="bat_dmg.png",
                 idle_image="bat.png",
-                attack_force=5,
+                attack_image="bat.png",
+                attack_force=1,
                 rarity=0.5,
                 is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
             )
@@ -111,6 +113,7 @@ class GameData:
             self.hero.move()
 
             # For each enemy
+            alive_enemies = []
             for enemy in self.enemies:
                 # Draw and update it
                 self.draw(enemy.image, enemy.rect)
@@ -118,6 +121,11 @@ class GameData:
 
                 # Check for attacks against hero
                 self.hero.check_attack(enemy, enemy.attack_force)
+
+                if not enemy.is_dead:
+                    alive_enemies.append(enemy)
+
+            self.enemies = alive_enemies
 
             # Update screen with recently drawn elements
             pygame.display.flip()
