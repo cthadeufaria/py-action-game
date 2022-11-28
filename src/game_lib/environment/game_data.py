@@ -16,29 +16,34 @@ class GameData:
         clock: pygame.time.Clock,
         fps: int,
         bg_color: Tuple[int, int, int],
+        font: pygame.font.Font,
     ) -> None:
         """Initialize GameData instance."""
         self.screen = screen
         self.clock = clock
         self.fps = fps
         self.bg_color = bg_color
+        self.font = font
 
         self.hero = Hero(
             position=(800, 500),
             image_paths=["orc.png"],
             dimensions=(3 * 20, 3 * 32),
             base_speed=3,
-            health_points=15,
+            health_points=400,  # TODO: different classes can have different HPs and base attack forces
             damage_image="orc_dmg.png",
             idle_image="orc.png",
             attack_image="orc_atk.png",
         )
 
-        # Get screen dimensions
-        w, h = pygame.display.get_surface().get_size()
+        # Instance the main room
+        self.game_room = Room(walls=[], map_image_path="feup_map.png")
+
+        # Get room dimensions
+        w, h = self.game_room.map_rect.w, self.game_room.map_rect.h
         self.temp_tile_size = 10
 
-        # Initialize 10 randomly instantiated enemies
+        # Initialize 40 randomly instantiated enemies
         # TODO: perhaps select difficulty level at the beginning and generate more/less enemies
         self.enemies = [
             Enemy(
@@ -54,42 +59,13 @@ class GameData:
                 rarity=0.5,
                 is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
             )
-            for _ in range(10)
+            for _ in range(40)
         ]
-
-        # Generate temp map
-        temp_map: list[list[str]] = [
-            ["x" for _ in range(w // self.temp_tile_size)],
-            *[
-                [
-                    "x",
-                    *[choice([" ", "x"]) for _ in range(-2 + w // self.temp_tile_size)],
-                    "x",
-                ]
-                for _ in range(-2 + h // self.temp_tile_size)
-            ],
-            ["x" for _ in range(w // self.temp_tile_size)],
-        ]
-
-        # Draw temp walls
-        walls = []
-        for row_idx, row in enumerate(temp_map):
-            for col_idx, col in enumerate(row):
-                if col == "x":
-                    walls.append(
-                        pygame.Rect(
-                            col_idx * self.temp_tile_size,
-                            row_idx * self.temp_tile_size,
-                            self.temp_tile_size,
-                            self.temp_tile_size,
-                        ),
-                    )
-
-        self.game_room = Room(walls=walls, map_image_path="feup_map.png")
 
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
         game_ended = False
+        total_enemies = len(self.enemies)
         while not game_ended:
             for event in pygame.event.get():
                 # Check if user clicks X button in window
@@ -126,6 +102,16 @@ class GameData:
                     alive_enemies.append(enemy)
 
             self.enemies = alive_enemies
+
+            # Display HP
+            self.screen.blit(
+                self.font.render(f'HP {self.hero.health_points}', True, 'White'), (10, 10)
+            )
+            # Display points
+            self.screen.blit(
+                self.font.render(f'Points {5 * (total_enemies - len(self.enemies))}', True, 'White'),
+                (self.screen.get_width() - 400, self.screen.get_height() - 50)
+            )
 
             # Update screen with recently drawn elements
             pygame.display.flip()
