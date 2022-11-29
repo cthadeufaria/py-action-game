@@ -17,7 +17,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 2960,
-                "y": 802
+                "y": 800
             }
         },
         "feup_map.tmx#buildings": {
@@ -29,11 +29,11 @@
             "scaleInDock": 1
         },
         "feup_map2.tmx": {
-            "scale": 0.21760135135135134,
-            "selectedLayer": 0,
+            "scale": 0.2785,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 2959.54044403043,
-                "y": 801.9251668995498
+                "x": -143.62657091561937,
+                "y": 373.42908438061033
             }
         },
         "feup_map2.tmx#buildings": {
@@ -46,7 +46,8 @@
             "scaleInDock": 1
         },
         "feup_map2.tmx#buildings_3": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1
         },
         "feup_map2.tmx#feupscape_tileset": {
             "dynamicWrapping": false,
