@@ -20,7 +20,7 @@ pygame.init()
 # Set window name, size and default font
 pygame.display.set_caption("FEUPscape")
 screen = pygame.display.set_mode(constants.screen.dimensions["medium"])
-font = pygame.font.Font("assets/wonder.ttf", 25)
+font = pygame.font.Font("src/assets/wonder.ttf", 25)
 
 # Create clock for game loop
 clock = pygame.time.Clock()
@@ -34,4 +34,5 @@ if __name__ == "__main__":
         bg_color=constants.colors.GRASS,
         font=font,
     )
+    game.menu_loop()
     game.game_loop()
