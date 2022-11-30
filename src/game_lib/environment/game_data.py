@@ -4,7 +4,7 @@ import pygame
 from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
-from random import choice, randint, random
+from random import randint, random
 
 
 class GameData:
@@ -24,6 +24,7 @@ class GameData:
         self.fps = fps
         self.bg_color = bg_color
         self.font = font
+        self.game_ended = False
 
         self.hero = Hero(
             position=(800, 500),
@@ -62,15 +63,145 @@ class GameData:
             for _ in range(40)
         ]
 
-    def game_loop(self) -> None:
-        """Run each iteration of the game at a constant frame rate."""
-        game_ended = False
-        total_enemies = len(self.enemies)
-        while not game_ended:
+    def menu_loop(self) -> None:
+        """Loop menu screen for selection."""
+        self.menu_ended = False
+        mouse: Tuple[int, int]
+        texts: list[pygame.surface.Surface]
+        words: list[str]
+
+        # Main menu variables
+        color = (255, 255, 255)
+        color_light = (170, 170, 170)
+        color_dark = (100, 100, 100)
+        width = self.screen.get_width()
+        height = self.screen.get_height()
+        smallfont = pygame.font.SysFont("Corbel", 35)
+        buttons_placement = (width / 2, height / 2)
+        buttons_spacement = 20
+        buttons_size = (140, 40)
+        words = ["Quit", "Play Now"]
+        texts = []
+
+        while not self.menu_ended and not self.game_ended:
+            # fills the screen with a color
+            self.screen.fill((60, 25, 60))
+            # stores the (x,y) coordinates into the variable as a tuple
+            mouse = pygame.mouse.get_pos()
+
             for event in pygame.event.get():
                 # Check if user clicks X button in window
                 if event.type == pygame.QUIT:
-                    game_ended = True
+                    self.game_ended = True
+
+                # Check if a mouse is clicked
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    # Quit button:
+                    if (
+                        buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
+                        and buttons_placement[1] - buttons_size[1] <= mouse[1] <= buttons_placement[1] + buttons_size[1]
+                    ):
+                        self.game_ended = True
+
+                    # Play Now button:
+                    if (
+                        buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
+                        and buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement <= mouse[1] <= buttons_placement[1] + 2 * buttons_size[1]- buttons_spacement
+                    ):
+                        self.menu_ended = True
+
+                    # Options button:
+                    if (
+                        buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
+                        and buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement <= mouse[1] <= buttons_placement[1] + 3 * buttons_size[1]- 2 * buttons_spacement
+                    ):
+                        self.menu_ended = True
+        
+            # if mouse is hovered on a button it changes to lighter shade
+            # Quit button:
+            if (
+                buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
+                and buttons_placement[1] - buttons_size[1] <= mouse[1] <= buttons_placement[1] + buttons_size[1]
+            ):
+                # change to self.draw
+                pygame.draw.rect(
+                    self.screen, color_light, 
+                [
+                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - buttons_size[1], 2 * buttons_size[0], 2 * buttons_size[1]
+                ]
+                )
+            else:
+                # change to self.draw
+                pygame.draw.rect(
+                    self.screen, color_dark, 
+                [
+                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - buttons_size[1], 2 * buttons_size[0], 2 * buttons_size[1]
+                ]
+                )
+
+            # Play Now button:
+            if (
+                buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
+                and buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement <= mouse[1] <= buttons_placement[1] + 2 * buttons_size[1]- buttons_spacement
+            ):
+                # change to self.draw
+                pygame.draw.rect(
+                    self.screen, color_light, 
+                [
+                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement, 
+                    2 * buttons_size[0], 2 * buttons_size[1]
+                ]
+                )
+            else:
+                # change to self.draw
+                pygame.draw.rect(
+                    self.screen, color_dark, 
+                [
+                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement, 
+                    2 * buttons_size[0], 2 * buttons_size[1]
+                ]
+                )
+
+            # # Options button:
+            # if (
+            #     buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
+            #     and buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement <= mouse[1] <= buttons_placement[1] + 3 * buttons_size[1]- 2 * buttons_spacement
+            # ):
+            #     # change to self.draw
+            #     pygame.draw.rect(
+            #         self.screen, color_light, 
+            #     [
+            #         buttons_placement[0] - buttons_size[0], buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement, 
+            #         2 * buttons_size[0], 2 * buttons_size[1]
+            #     ]
+            #     )
+            # else:
+            #     # change to self.draw
+            #     pygame.draw.rect(
+            #         self.screen, color_dark, 
+            #     [
+            #         buttons_placement[0] - buttons_size[0], buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement, 
+            #         2 * buttons_size[0], 2 * buttons_size[1]
+            #     ]
+            #     )
+
+            # superimposing the text onto button
+            for word in words:
+                texts.append(smallfont.render(word, True, color))
+            for text in texts:
+                self.screen.blit(text, (buttons_placement[0] + 50, buttons_placement[1]))
+
+            # updates the frames of the game
+            pygame.display.update()
+
+    def game_loop(self) -> None:
+        """Run each iteration of the game at a constant frame rate."""
+        total_enemies = len(self.enemies)
+        while not self.game_ended:
+            for event in pygame.event.get():
+                # Check if user clicks X button in window
+                if event.type == pygame.QUIT:
+                    self.game_ended = True
 
             # Fill screen with default background color
             self.screen.fill(self.bg_color)
@@ -105,12 +236,15 @@ class GameData:
 
             # Display HP
             self.screen.blit(
-                self.font.render(f'HP {self.hero.health_points}', True, 'White'), (10, 10)
+                self.font.render(f"HP {self.hero.health_points}", True, "White"),
+                (10, 10),
             )
             # Display points
             self.screen.blit(
-                self.font.render(f'Points {5 * (total_enemies - len(self.enemies))}', True, 'White'),
-                (self.screen.get_width() - 400, self.screen.get_height() - 50)
+                self.font.render(
+                    f"Points {5 * (total_enemies - len(self.enemies))}", True, "White"
+                ),
+                (self.screen.get_width() - 400, self.screen.get_height() - 50),
             )
 
             # Update screen with recently drawn elements
