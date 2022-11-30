@@ -69,6 +69,7 @@ class GameData:
         mouse: Tuple[int, int]
         texts: list[pygame.surface.Surface]
         words: list[str]
+        rects: list[pygame.Rect]
 
         # Main menu variables
         color = (255, 255, 255)
@@ -79,9 +80,16 @@ class GameData:
         smallfont = pygame.font.SysFont("Corbel", 35)
         buttons_placement = (width / 2, height / 2)
         buttons_spacement = 20
-        buttons_size = (140, 40)
-        words = ["Quit", "Play Now"]
+        button_width = 280
+        button_height = 60
+        words = ["Quit", "Play Now", "Options"]
         texts = []
+        rects = []
+
+        # create dictionaty of rectangles
+        for i in [item for item in range(len(words))]:
+            rects.append(pygame.Rect(buttons_placement[0] - button_width / 2, buttons_placement[1] + (i) * button_height + (i) * buttons_spacement, 
+            button_width, button_height))
 
         while not self.menu_ended and not self.game_ended:
             # fills the screen with a color
@@ -96,103 +104,25 @@ class GameData:
 
                 # Check if a mouse is clicked
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # Quit button:
-                    if (
-                        buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
-                        and buttons_placement[1] - buttons_size[1] <= mouse[1] <= buttons_placement[1] + buttons_size[1]
-                    ):
-                        self.game_ended = True
-
-                    # Play Now button:
-                    if (
-                        buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
-                        and buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement <= mouse[1] <= buttons_placement[1] + 2 * buttons_size[1]- buttons_spacement
-                    ):
-                        self.menu_ended = True
-
-                    # Options button:
-                    if (
-                        buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
-                        and buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement <= mouse[1] <= buttons_placement[1] + 3 * buttons_size[1]- 2 * buttons_spacement
-                    ):
-                        self.menu_ended = True
+                    for rect in rects:
+                        if(pygame.Rect.collidepoint(rect, mouse)):
+                            if(words[rects.index(rect)] == "Quit"):
+                                self.game_ended = True
+                            else:
+                                self.menu_ended = True
         
             # if mouse is hovered on a button it changes to lighter shade
-            # Quit button:
-            if (
-                buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
-                and buttons_placement[1] - buttons_size[1] <= mouse[1] <= buttons_placement[1] + buttons_size[1]
-            ):
-                # change to self.draw
-                pygame.draw.rect(
-                    self.screen, color_light, 
-                [
-                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - buttons_size[1], 2 * buttons_size[0], 2 * buttons_size[1]
-                ]
-                )
-            else:
-                # change to self.draw
-                pygame.draw.rect(
-                    self.screen, color_dark, 
-                [
-                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - buttons_size[1], 2 * buttons_size[0], 2 * buttons_size[1]
-                ]
-                )
-
-            # Play Now button:
-            if (
-                buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
-                and buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement <= mouse[1] <= buttons_placement[1] + 2 * buttons_size[1]- buttons_spacement
-            ):
-                # change to self.draw
-                pygame.draw.rect(
-                    self.screen, color_light, 
-                [
-                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement, 
-                    2 * buttons_size[0], 2 * buttons_size[1]
-                ]
-                )
-            else:
-                # change to self.draw
-                pygame.draw.rect(
-                    self.screen, color_dark, 
-                [
-                    buttons_placement[0] - buttons_size[0], buttons_placement[1] - 2 * buttons_size[1] - buttons_spacement, 
-                    2 * buttons_size[0], 2 * buttons_size[1]
-                ]
-                )
-
-            # # Options button:
-            # if (
-            #     buttons_placement[0] - buttons_size[0] <= mouse[0] <= buttons_placement[0] + buttons_size[0]
-            #     and buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement <= mouse[1] <= buttons_placement[1] + 3 * buttons_size[1]- 2 * buttons_spacement
-            # ):
-            #     # change to self.draw
-            #     pygame.draw.rect(
-            #         self.screen, color_light, 
-            #     [
-            #         buttons_placement[0] - buttons_size[0], buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement, 
-            #         2 * buttons_size[0], 2 * buttons_size[1]
-            #     ]
-            #     )
-            # else:
-            #     # change to self.draw
-            #     pygame.draw.rect(
-            #         self.screen, color_dark, 
-            #     [
-            #         buttons_placement[0] - buttons_size[0], buttons_placement[1] - 3 * buttons_size[1] - 2 * buttons_spacement, 
-            #         2 * buttons_size[0], 2 * buttons_size[1]
-            #     ]
-            #     )
-
-            # superimposing the text onto button
-            for word in words:
-                texts.append(smallfont.render(word, True, color))
-            for text in texts:
-                self.screen.blit(text, (buttons_placement[0] + 50, buttons_placement[1]))
+            for rect in rects:
+                if(pygame.Rect.collidepoint(rect, mouse)):
+                    pygame.draw.rect(self.screen, color_light, rect, 0)
+                else:
+                    pygame.draw.rect(self.screen, color_dark, rect, 0)
+                            
+                # superimposing the text onto button
+                self.screen.blit(smallfont.render(words[rects.index(rect)], True, color), (rect[0] + (rect[2] / 2), rect[1] + (rect[3] / 2)))
 
             # updates the frames of the game
-            pygame.display.update()
+            pygame.display.update()            
 
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
