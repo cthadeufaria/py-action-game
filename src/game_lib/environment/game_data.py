@@ -67,7 +67,6 @@ class GameData:
         """Loop menu screen for selection."""
         self.menu_ended = False
         mouse: Tuple[int, int]
-        texts: list[pygame.surface.Surface]
         words: list[str]
         rects: list[pygame.Rect]
 
@@ -83,13 +82,20 @@ class GameData:
         button_width = 280
         button_height = 60
         words = ["Quit", "Play Now", "Options"]
-        texts = []
         rects = []
 
         # create dictionaty of rectangles
         for i in [item for item in range(len(words))]:
-            rects.append(pygame.Rect(buttons_placement[0] - button_width / 2, buttons_placement[1] + (i) * button_height + (i) * buttons_spacement, 
-            button_width, button_height))
+            rects.append(
+                pygame.Rect(
+                    buttons_placement[0] - button_width / 2,
+                    buttons_placement[1]
+                    + (i) * button_height
+                    + (i) * buttons_spacement,
+                    button_width,
+                    button_height,
+                )
+            )
 
         while not self.menu_ended and not self.game_ended:
             # fills the screen with a color
@@ -105,24 +111,27 @@ class GameData:
                 # Check if a mouse is clicked
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for rect in rects:
-                        if(pygame.Rect.collidepoint(rect, mouse)):
-                            if(words[rects.index(rect)] == "Quit"):
+                        if pygame.Rect.collidepoint(rect, mouse):
+                            if words[rects.index(rect)] == "Quit":
                                 self.game_ended = True
                             else:
                                 self.menu_ended = True
-        
+
             # if mouse is hovered on a button it changes to lighter shade
             for rect in rects:
-                if(pygame.Rect.collidepoint(rect, mouse)):
+                if pygame.Rect.collidepoint(rect, mouse):
                     pygame.draw.rect(self.screen, color_light, rect, 0)
                 else:
                     pygame.draw.rect(self.screen, color_dark, rect, 0)
-                            
+
                 # superimposing the text onto button
-                self.screen.blit(smallfont.render(words[rects.index(rect)], True, color), (rect[0] + (rect[2] / 2), rect[1] + (rect[3] / 2)))
+                self.screen.blit(
+                    smallfont.render(words[rects.index(rect)], True, color),
+                    (rect[0] + (rect[2] / 2), rect[1] + (rect[3] / 2)),
+                )
 
             # updates the frames of the game
-            pygame.display.update()            
+            pygame.display.update()
 
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
