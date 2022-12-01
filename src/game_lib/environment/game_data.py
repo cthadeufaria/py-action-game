@@ -205,11 +205,15 @@ class GameData:
             # get pressed keys
             keys = pygame.key.get_pressed()
 
+            # Enten game over screen based on health_points value
+            if self.hero.health_points <= 0:
+                self.game_over = True
+                self.menu_ended = False
+                self.menu_loop()
             # Press escape key to enter pause menu
-            if keys[pygame.K_ESCAPE]:
+            elif keys[pygame.K_ESCAPE]:
                 self.pause = True
                 self.menu_ended = False
-                print("escape")
                 self.menu_loop()
 
         pygame.quit()
