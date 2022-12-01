@@ -5,6 +5,7 @@ from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
+from constants.buttons import main_menu, pause_menu, game_over_menu
 
 
 class GameData:
@@ -25,6 +26,9 @@ class GameData:
         self.bg_color = bg_color
         self.font = font
         self.game_ended = False
+        self.menu_ended = False
+        self.pause = False
+        self.game_over = False
 
         self.hero = Hero(
             position=(800, 500),
@@ -64,24 +68,30 @@ class GameData:
         ]
 
     def menu_loop(self) -> None:
-        """Loop menu screen for selection."""
-        self.menu_ended = False
+        """Loop main menu, pause menu and game over screens."""
         mouse: Tuple[int, int]
-        words: list[str]
         rects: list[pygame.Rect]
 
-        # Main menu variables
-        color = (255, 255, 255)
-        color_light = (170, 170, 170)
-        color_dark = (100, 100, 100)
+        # Menu variables
+        if self.pause:
+            menu = pause_menu
+        elif self.game_over:
+            menu = game_over_menu
+        else:
+            menu = main_menu
+
         width = self.screen.get_width()
         height = self.screen.get_height()
-        smallfont = pygame.font.SysFont("Corbel", 35)
         buttons_placement = (width / 2, height / 2)
-        buttons_spacement = 20
-        button_width = 280
-        button_height = 60
-        words = ["Quit", "Play Now", "Options"]
+        smallfont = pygame.font.SysFont("Corbel", 35)
+
+        color = menu["color"]
+        color_light = menu["color_light"]
+        color_dark = menu["color_dark"]
+        buttons_spacement = menu["buttons_spacement"]
+        button_width = menu["button_width"]
+        button_height = menu["button_height"]
+        words = menu["words"]
         rects = []
 
         # create dictionaty of rectangles
@@ -191,6 +201,16 @@ class GameData:
 
             # Keep a constant FPS rate
             self.clock.tick(self.fps)
+
+            # get pressed keys
+            keys = pygame.key.get_pressed()
+
+            # Press escape key to enter pause menu
+            if keys[pygame.K_ESCAPE]:
+                self.pause = True
+                self.menu_ended = False
+                print("escape")
+                self.menu_loop()
 
         pygame.quit()
 
