@@ -24,7 +24,7 @@ pause_menu = {
     "buttons_spacement": 20,
     "button_width": 280,
     "button_height": 60,
-    "words": ["Quit", "Play Now", "Options"],
+    "words": ["Quit", "Resume", "Options"],
 }
 
 # Game over screen variables

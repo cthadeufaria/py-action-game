@@ -5,8 +5,8 @@ from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
-from constants.buttons import main_menu, pause_menu, game_over_menu, hero_selection_menu
-from constants.heroes import heroes
+import constants.buttons  # import main_menu, pause_menu, game_over_menu, hero_selection_menu
+import constants.heroes  # import heroes
 
 
 class GameData:
@@ -62,16 +62,18 @@ class GameData:
     def hero_select(self, word: str) -> None:
         """Select hero class to play with."""
         print(word)
-        hero = heroes[word]
+        hero = constants.heroes.heroes[word]
         self.hero = Hero(
-            position = hero['position'],
-            image_paths = hero['image_paths'],
-            dimensions=hero['dimensions'],
-            base_speed=hero['base_speed'],
-            health_points=hero['health_points'],  # TODO: different classes can have different HPs and base attack forces
-            damage_image=hero['damage_image'],
-            idle_image=hero['idle_image'],
-            attack_image=hero['attack_image'],
+            position=hero["position"],
+            image_paths=hero["image_paths"],
+            dimensions=hero["dimensions"],
+            base_speed=hero["base_speed"],
+            health_points=hero[
+                "health_points"
+            ],  # TODO: different classes can have different HPs and base attack forces
+            damage_image=hero["damage_image"],
+            idle_image=hero["idle_image"],
+            attack_image=hero["attack_image"],
         )
         self.hero_selection = False
 
@@ -82,13 +84,14 @@ class GameData:
 
         # Menu variables
         if self.pause:
-            menu = pause_menu
+            menu = constants.buttons.pause_menu
+            self.pause = False
         elif self.game_over:
-            menu = game_over_menu
+            menu = constants.buttons.game_over_menu
         elif self.hero_selection:
-            menu = hero_selection_menu
+            menu = constants.buttons.hero_selection_menu
         else:
-            menu = main_menu
+            menu = constants.buttons.main_menu
 
         width = self.screen.get_width()
         height = self.screen.get_height()
@@ -140,9 +143,16 @@ class GameData:
                                 except AttributeError:
                                     self.hero_selection = True
                                 self.menu_ended = True
+                            elif words[rects.index(rect)] == 'Resume':
+                                self.menu_ended = True
+                            elif words[rects.index(rect)] == 'Play Again':
+                                self.menu_ended = False # Define how to start game again from beggining
                             elif words[rects.index(rect)] == "Options":
-                                self.game_ended = True # Create options menu
-                            elif words[rects.index(rect)] in hero_selection_menu['words']:
+                                self.game_ended = True  # Create options menu
+                            elif (
+                                words[rects.index(rect)]
+                                in constants.buttons.hero_selection_menu["words"]
+                            ):
                                 self.menu_ended = True
                                 self.hero_select(words[rects.index(rect)])
 
@@ -163,8 +173,8 @@ class GameData:
             pygame.display.update()
 
         if self.hero_selection == True:
-                self.menu_ended = False
-                self.menu_loop()
+            self.menu_ended = False
+            self.menu_loop()
 
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
