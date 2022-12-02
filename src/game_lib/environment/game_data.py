@@ -5,7 +5,8 @@ from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
-from constants.buttons import main_menu, pause_menu, game_over_menu
+from constants.buttons import main_menu, pause_menu, game_over_menu, hero_selection_menu
+from constants.heroes import heroes
 
 
 class GameData:
@@ -20,6 +21,7 @@ class GameData:
         font: pygame.font.Font,
     ) -> None:
         """Initialize GameData instance."""
+        self.hero: Hero
         self.screen = screen
         self.clock = clock
         self.fps = fps
@@ -29,17 +31,7 @@ class GameData:
         self.menu_ended = False
         self.pause = False
         self.game_over = False
-
-        self.hero = Hero(
-            position=(800, 500),
-            image_paths=["orc.png"],
-            dimensions=(3 * 20, 3 * 32),
-            base_speed=3,
-            health_points=400,  # TODO: different classes can have different HPs and base attack forces
-            damage_image="orc_dmg.png",
-            idle_image="orc.png",
-            attack_image="orc_atk.png",
-        )
+        self.hero_selection = False
 
         # Instance the main room
         self.game_room = Room(walls=[], map_image_path="feup_map.png")
@@ -67,6 +59,22 @@ class GameData:
             for _ in range(40)
         ]
 
+    def hero_select(self, word: str) -> None:
+        """Select hero class to play with."""
+        print(word)
+        hero = heroes[word]
+        self.hero = Hero(
+            position = hero['position'],
+            image_paths = hero['image_paths'],
+            dimensions=hero['dimensions'],
+            base_speed=hero['base_speed'],
+            health_points=hero['health_points'],  # TODO: different classes can have different HPs and base attack forces
+            damage_image=hero['damage_image'],
+            idle_image=hero['idle_image'],
+            attack_image=hero['attack_image'],
+        )
+        self.hero_selection = False
+
     def menu_loop(self) -> None:
         """Loop main menu, pause menu and game over screens."""
         mouse: Tuple[int, int]
@@ -77,6 +85,8 @@ class GameData:
             menu = pause_menu
         elif self.game_over:
             menu = game_over_menu
+        elif self.hero_selection:
+            menu = hero_selection_menu
         else:
             menu = main_menu
 
@@ -94,7 +104,7 @@ class GameData:
         words = menu["words"]
         rects = []
 
-        # create dictionaty of rectangles
+        # create list of rectangles
         for i in [item for item in range(len(words))]:
             rects.append(
                 pygame.Rect(
@@ -124,8 +134,17 @@ class GameData:
                         if pygame.Rect.collidepoint(rect, mouse):
                             if words[rects.index(rect)] == "Quit":
                                 self.game_ended = True
-                            else:
+                            if words[rects.index(rect)] == "Play Now":
+                                try:
+                                    type(self.hero) == Hero
+                                except AttributeError:
+                                    self.hero_selection = True
                                 self.menu_ended = True
+                            elif words[rects.index(rect)] == "Options":
+                                self.game_ended = True # Create options menu
+                            elif words[rects.index(rect)] in hero_selection_menu['words']:
+                                self.menu_ended = True
+                                self.hero_select(words[rects.index(rect)])
 
             # if mouse is hovered on a button it changes to lighter shade
             for rect in rects:
@@ -142,6 +161,10 @@ class GameData:
 
             # updates the frames of the game
             pygame.display.update()
+
+        if self.hero_selection == True:
+                self.menu_ended = False
+                self.menu_loop()
 
     def game_loop(self) -> None:
         """Run each iteration of the game at a constant frame rate."""
