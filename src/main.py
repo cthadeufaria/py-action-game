@@ -27,12 +27,18 @@ clock = pygame.time.Clock()
 
 # Entry point, game loop
 if __name__ == "__main__":
-    game = GameData(
-        screen=screen,
-        clock=clock,
-        fps=constants.screen.FPS,
-        bg_color=constants.colors.GRASS,
-        font=font,
-    )
-    game.menu_loop()
-    game.game_loop()
+    not_quit = True
+    while not_quit:
+        game = GameData(
+            screen=screen,
+            clock=clock,
+            fps=constants.screen.FPS,
+            bg_color=constants.colors.GRASS,
+            font=font,
+        )
+        is_play_again = True
+        while is_play_again:
+            not_quit = game.menu_loop()
+            is_play_again = game.game_loop()
+            if is_play_again == False:
+                not_quit = True

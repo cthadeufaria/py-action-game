@@ -32,6 +32,7 @@ class GameData:
         self.pause = False
         self.game_over = False
         self.hero_selection = False
+        self.is_quit = False
 
         # Instance the main room
         self.game_room = Room(walls=[], map_image_path="feup_map.png")
@@ -61,8 +62,7 @@ class GameData:
 
     def hero_select(self, word: str) -> None:
         """Select hero class to play with."""
-        print(word)
-        hero = constants.heroes.heroes[word]
+        hero = constants.heroes.heroes[word] # todo: insert more classes in constants.heroes to play with
         self.hero = Hero(
             position=hero["position"],
             image_paths=hero["image_paths"],
@@ -130,6 +130,7 @@ class GameData:
                 # Check if user clicks X button in window
                 if event.type == pygame.QUIT:
                     self.game_ended = True
+                    return False
 
                 # Check if a mouse is clicked
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -137,6 +138,7 @@ class GameData:
                         if pygame.Rect.collidepoint(rect, mouse):
                             if words[rects.index(rect)] == "Quit":
                                 self.game_ended = True
+                                return False
                             if words[rects.index(rect)] == "Play Now":
                                 try:
                                     type(self.hero) == Hero
@@ -146,9 +148,11 @@ class GameData:
                             elif words[rects.index(rect)] == 'Resume':
                                 self.menu_ended = True
                             elif words[rects.index(rect)] == 'Play Again':
-                                self.menu_ended = False # Define how to start game again from beggining
+                                self.menu_ended = False
+                                return False
                             elif words[rects.index(rect)] == "Options":
-                                self.game_ended = True  # Create options menu
+                                self.game_ended = True  # todo: Create options menu
+                                return False
                             elif (
                                 words[rects.index(rect)]
                                 in constants.buttons.hero_selection_menu["words"]
@@ -172,6 +176,9 @@ class GameData:
             # updates the frames of the game
             pygame.display.update()
 
+        if self.is_quit == True:
+            return False
+
         if self.hero_selection == True:
             self.menu_ended = False
             self.menu_loop()
@@ -183,7 +190,8 @@ class GameData:
             for event in pygame.event.get():
                 # Check if user clicks X button in window
                 if event.type == pygame.QUIT:
-                    self.game_ended = True
+                    self.is_quit = True
+                    return self.menu_loop()
 
             # Fill screen with default background color
             self.screen.fill(self.bg_color)
@@ -238,11 +246,11 @@ class GameData:
             # get pressed keys
             keys = pygame.key.get_pressed()
 
-            # Enten game over screen based on health_points value
+            # Enter game over screen based on health_points value
             if self.hero.health_points <= 0:
                 self.game_over = True
                 self.menu_ended = False
-                self.menu_loop()
+                return self.menu_loop()
             # Press escape key to enter pause menu
             elif keys[pygame.K_ESCAPE]:
                 self.pause = True
