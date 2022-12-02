@@ -61,4 +61,8 @@ class LivingElement(MovingElement):
 
     def heal(self, hp: int) -> None:
         """Heal living element increasing health points."""
-        pass
+
+    # if hp >= (self.max_hp - hp):
+    #     self.health_points = self.max_hp
+    # else:
+    #     self.health_points += hp

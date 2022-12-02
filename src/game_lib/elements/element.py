@@ -36,6 +36,6 @@ class Element(pygame.sprite.Sprite):
         self.image = self.image_list[0]
         self.rect.update(self.position, self.dimensions)
 
-    def is_colliding(self, elem: 'Element') -> bool:
+    def is_colliding(self, elem: "Element") -> bool:
         """Check if element is colliding with another element."""
         return self.rect.colliderect(elem.rect)
