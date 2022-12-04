@@ -23,6 +23,31 @@ class GameData:
         self.fps = fps
         self.bg_color = bg_color
 
+        pygame.mixer.init()
+
+        # Create sound channels
+        soundtrack_channel = pygame.mixer.Channel(0)
+        hero_effects_channel = pygame.mixer.Channel(1)
+        enemy_effects_channel = pygame.mixer.Channel(2)
+        special_effects_channel = pygame.mixer.Channel(3)
+
+        # Set up sound files
+        soundtrack = pygame.mixer.Sound("soundtrack.mp3")
+        melee_attack = pygame.mixer.Sound("foom_0.mp3")
+        ranged_attack = pygame.mixer.Sound("bow.mp3")
+        blood_splash = pygame.mixer.Sound("blood2.mp3")
+        enemy_cry = pygame.mixer.Sound("enemy_cry.mp3")
+        hero_heal = pygame.mixer.Sound("instant_heal.mp3")
+        collect_coin = pygame.mixer.Sound("collect_coin.mp3")
+        minotaur_drums = pygame.mixer.Sound("minotaur_drums.mp3")
+        room_ambience = pygame.mixer.Sound("room_ambience.mp3")
+        getting_hit = pygame.mixer.Sound("getting_hit.mp3")
+        open_menu = pygame.mixer.Sound("open_menu.mp3")
+        close_menu = pygame.mixer.Sound("close_menu.mp3")
+        mouseover = pygame.mixer.Sound("mouseover.mp3")
+        death_cry = pygame.mixer.Sound("death_cry.mp3")
+        completed_boss = pygame.mixer.Sound("completed_boss.mp3")
+
         self.hero = Hero(
             position=(800, 500),
             image_paths=["orc.png"],
