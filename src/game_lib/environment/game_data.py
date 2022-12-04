@@ -4,7 +4,7 @@ import pygame
 from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
-from random import choice, randint, random
+from random import randint, random
 
 
 class GameData:
@@ -37,7 +37,9 @@ class GameData:
         )
 
         # Instance the main room
-        self.game_room = Room(walls=[], map_image_path="feup_map.png")
+        self.game_room = Room(
+            walls_file_path="walls.json", map_image_path="feup_map.png"
+        )
 
         # Get room dimensions
         w, h = self.game_room.map_rect.w, self.game_room.map_rect.h
@@ -58,6 +60,7 @@ class GameData:
                 attack_force=1,
                 rarity=0.5,
                 is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                can_fly=True,
             )
             for _ in range(40)
         ]
@@ -86,7 +89,7 @@ class GameData:
             else:
                 self.draw(self.hero.image, self.hero.rect)
             self.hero.get_input()
-            self.hero.move()
+            self.hero.move(self.game_room.walls)
 
             # For each enemy
             alive_enemies = []
@@ -103,14 +106,19 @@ class GameData:
 
             self.enemies = alive_enemies
 
+            self.game_room.position_walls(self.screen, self.hero)
+
             # Display HP
             self.screen.blit(
-                self.font.render(f'HP {self.hero.health_points}', True, 'White'), (10, 10)
+                self.font.render(f"HP {self.hero.health_points}", True, "White"),
+                (10, 10),
             )
             # Display points
             self.screen.blit(
-                self.font.render(f'Points {5 * (total_enemies - len(self.enemies))}', True, 'White'),
-                (self.screen.get_width() - 400, self.screen.get_height() - 50)
+                self.font.render(
+                    f"Points {5 * (total_enemies - len(self.enemies))}", True, "White"
+                ),
+                (self.screen.get_width() - 400, self.screen.get_height() - 50),
             )
 
             # Update screen with recently drawn elements

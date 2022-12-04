@@ -17,7 +17,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 2960,
-                "y": 800
+                "y": 802
             }
         },
         "feup_map.tmx#buildings": {
@@ -29,11 +29,11 @@
             "scaleInDock": 1
         },
         "feup_map2.tmx": {
-            "scale": 0.2785,
+            "scale": 0.1199,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": -143.62657091561937,
-                "y": 373.42908438061033
+                "x": 3248.5404503753134,
+                "y": 658.8824020016682
             }
         },
         "feup_map2.tmx#buildings": {

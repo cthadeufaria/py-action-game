@@ -1,6 +1,8 @@
 """Class that stores state of a limited space inside the game environment."""
 import sys
+import json
 from typing import Tuple
+from ..elements.hero import Hero
 import pygame
 
 try:
@@ -13,10 +15,20 @@ except IndexError:
 class Room:
     """Class that stores state of a limited space inside the game environment."""
 
-    def __init__(self, walls: list[pygame.Rect], map_image_path: str) -> None:
+    def __init__(self, walls_file_path: str, map_image_path: str) -> None:
         """Initialize Room instance."""
-        self.walls = walls
         self.map_surface, self.map_rect = load_png(map_image_path)
+
+        with open(f"constants/{walls_file_path}") as walls_file:
+            walls_grid = json.load(walls_file)
+            self.walls: list[pygame.Rect] = []
+
+            for row_idx, row in enumerate(walls_grid):
+                for col_idx, wall in enumerate(row):
+                    if wall:
+                        self.walls.append(
+                            pygame.Rect(col_idx * 32, row_idx * 32, 32, 32)
+                        )
 
     def draw_map(
         self, screen: pygame.surface.Surface, pos_offset: Tuple[int, int]
@@ -30,13 +42,15 @@ class Room:
             ),
         )
 
-    def position_walls(
-        self, screen: pygame.surface.Surface, pos_offset: Tuple[int, int]
-    ) -> None:
+    def position_walls(self, screen: pygame.surface.Surface, hero: Hero) -> None:
         """Position all walls depending on player's position."""
         for wall in self.walls:
-            wall = wall.move(wall.topleft[0] - pos_offset[0], wall.topleft[1] - pos_offset[1])  # type: ignore
-            # screen.blit image
-            pygame.draw.rect(
-                screen, "red", wall
-            )  # TEMPORARY red for debugging purposes
+            wall.move(
+                -hero.rect.centerx + screen.get_size()[0] // 2,
+                -hero.rect.centery + screen.get_size()[1] // 2,
+            )
+
+            # Draw wall for debugging purposes
+            # pygame.draw.rect(
+            #     screen, "red", wall
+            # )

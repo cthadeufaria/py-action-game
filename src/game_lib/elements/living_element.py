@@ -24,9 +24,10 @@ class LivingElement(MovingElement):
         damage_image: str,
         idle_image: str,
         attack_image: str,
+        can_fly: bool = False,
     ) -> None:
         """Initialize LivingElement instance."""
-        super().__init__(position, image_paths, dimensions, base_speed)
+        super().__init__(position, image_paths, dimensions, base_speed, can_fly)
         self.is_dead = False
         self.health_points = health_points
         self.damage_image = pygame.transform.scale(
