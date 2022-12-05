@@ -9,6 +9,7 @@ import pygame
 # Local imports
 import constants.colors
 import constants.screen
+from constants.heroes import heroes
 from game_lib.environment.game_data import GameData
 
 # Center window
@@ -27,18 +28,31 @@ clock = pygame.time.Clock()
 
 # Entry point, game loop
 if __name__ == "__main__":
-    not_quit = True
-    while not_quit:
-        game = GameData(
-            screen=screen,
-            clock=clock,
-            fps=constants.screen.FPS,
-            bg_color=constants.colors.GRASS,
-            font=font,
-        )
-        is_play_again = True
-        while is_play_again:
-            not_quit = game.menu_loop()
-            is_play_again = game.game_loop()
-            if is_play_again == False:
-                not_quit = True
+    state = "main_menu"
+    game = GameData(
+        screen=screen,
+        clock=clock,
+        fps=constants.screen.FPS,
+        bg_color=constants.colors.GRASS,
+        font=font,
+    )
+
+    while state != "quit":
+        if state == "play again" or state == "resume":
+            state = game.game_loop()
+        elif state == "main_menu":
+            state = game.menu_loop("main_menu")
+        elif state == "play now":
+            state = game.menu_loop("hero_selection_menu")
+        elif state == "pause":
+            state = game.menu_loop("pause_menu")
+        elif state == "game_over":
+            state = game.menu_loop("game_over_menu")
+        elif state in [h.lower() for h in heroes.keys()]:
+            game.change_hero(state)
+            state = "resume"
+        elif state == "options":
+            # TODO: create options menu later
+            state = "quit"
+
+    pygame.quit()

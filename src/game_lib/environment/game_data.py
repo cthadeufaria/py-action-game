@@ -1,12 +1,13 @@
 """Class that stores state of the game environment."""
-from typing import Tuple
+import os.path
+from typing import Tuple, TypedDict
 import pygame
 from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
-import constants.buttons  # import main_menu, pause_menu, game_over_menu, hero_selection_menu
-import constants.heroes  # import heroes
+from constants.heroes import heroes
+from constants.buttons import menus
 
 
 class GameData:
@@ -21,18 +22,22 @@ class GameData:
         font: pygame.font.Font,
     ) -> None:
         """Initialize GameData instance."""
-        self.hero: Hero
         self.screen = screen
         self.clock = clock
         self.fps = fps
         self.bg_color = bg_color
         self.font = font
-        self.game_ended = False
-        self.menu_ended = False
-        self.pause = False
-        self.game_over = False
-        self.hero_selection = False
-        self.is_quit = False
+
+        self.hero = Hero(
+            position=(800, 500),
+            image_paths=["orc.png"],
+            dimensions=(3 * 32, 3 * 32),
+            base_speed=3,
+            health_points=400,
+            damage_image="orc_dmg.png",
+            idle_image="orc.png",
+            attack_image="orc_atk.png",
+        )
 
         # Instance the main room
         self.game_room = Room(walls=[], map_image_path="feup_map.png")
@@ -60,138 +65,109 @@ class GameData:
             for _ in range(40)
         ]
 
-    def hero_select(self, word: str) -> None:
-        """Select hero class to play with."""
-        hero = constants.heroes.heroes[word] # todo: insert more classes in constants.heroes to play with
+    def change_hero(self, role: str) -> None:
+        """Create new hero object based on selected role."""
         self.hero = Hero(
-            position=hero["position"],
-            image_paths=hero["image_paths"],
-            dimensions=hero["dimensions"],
-            base_speed=hero["base_speed"],
-            health_points=hero[
-                "health_points"
-            ],  # TODO: different classes can have different HPs and base attack forces
-            damage_image=hero["damage_image"],
-            idle_image=hero["idle_image"],
-            attack_image=hero["attack_image"],
+            position=(800, 500),
+            image_paths=[os.path.join("heroes", role, "male", "walk_0.png")],
+            dimensions=(3 * 32, 3 * 32),
+            base_speed=heroes[role]["base_speed"],
+            health_points=heroes[role]["health_points"],
+            damage_image=os.path.join("heroes", role, "male", "die_3.png"),
+            idle_image=os.path.join("heroes", role, "male", "walk_3.png"),
+            attack_image=os.path.join("heroes", role, "male", "attack_3.png"),
         )
-        self.hero_selection = False
 
-    def menu_loop(self) -> None:
+    def menu_loop(self, menu_name: str) -> str:
         """Loop main menu, pause menu and game over screens."""
         mouse: Tuple[int, int]
         rects: list[pygame.Rect]
 
-        # Menu variables
-        if self.pause:
-            menu = constants.buttons.pause_menu
-            self.pause = False
-        elif self.game_over:
-            menu = constants.buttons.game_over_menu
-        elif self.hero_selection:
-            menu = constants.buttons.hero_selection_menu
-        else:
-            menu = constants.buttons.main_menu
+        menu_type = TypedDict(
+            "menu_type",
+            {
+                "color_text": Tuple[int, int, int],
+                "color_light": Tuple[int, int, int],
+                "color_dark": Tuple[int, int, int],
+                "buttons_spacement": int,
+                "button_width": int,
+                "button_height": int,
+                "options": Tuple[str, ...],
+            },
+        )
+        menu: menu_type = menus[menu_name]
 
-        width = self.screen.get_width()
-        height = self.screen.get_height()
-        buttons_placement = (width / 2, height / 2)
-        smallfont = pygame.font.SysFont("Corbel", 35)
+        screen_width = self.screen.get_width()
+        screen_height = self.screen.get_height()
 
-        color = menu["color"]
-        color_light = menu["color_light"]
-        color_dark = menu["color_dark"]
-        buttons_spacement = menu["buttons_spacement"]
-        button_width = menu["button_width"]
-        button_height = menu["button_height"]
-        words = menu["words"]
+        button_options = menu["options"]
         rects = []
 
-        # create list of rectangles
-        for i in [item for item in range(len(words))]:
+        # Create list with one rectangle for each button
+        for idx in range(len(button_options)):
             rects.append(
                 pygame.Rect(
-                    buttons_placement[0] - button_width / 2,
-                    buttons_placement[1]
-                    + (i) * button_height
-                    + (i) * buttons_spacement,
-                    button_width,
-                    button_height,
+                    screen_width // 2 - menu["button_width"] // 2,
+                    screen_height // 2
+                    + (idx - len(button_options) // 2) * menu["button_height"]
+                    + (idx - len(button_options) // 2) * menu["buttons_spacement"],
+                    menu["button_width"],
+                    menu["button_height"],
                 )
             )
 
-        while not self.menu_ended and not self.game_ended:
-            # fills the screen with a color
-            self.screen.fill((60, 25, 60))
+        while True:
+            # fills the screen with a color - TODO: put image instead
+            self.screen.fill((50, 50, 50))
+
             # stores the (x,y) coordinates into the variable as a tuple
             mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
                 # Check if user clicks X button in window
                 if event.type == pygame.QUIT:
-                    self.game_ended = True
-                    return False
+                    return "quit"
 
                 # Check if a mouse is clicked
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for rect in rects:
+                        # Return text correspondent to clicked button
                         if pygame.Rect.collidepoint(rect, mouse):
-                            if words[rects.index(rect)] == "Quit":
-                                self.game_ended = True
-                                return False
-                            if words[rects.index(rect)] == "Play Now":
-                                try:
-                                    type(self.hero) == Hero
-                                except AttributeError:
-                                    self.hero_selection = True
-                                self.menu_ended = True
-                            elif words[rects.index(rect)] == 'Resume':
-                                self.menu_ended = True
-                            elif words[rects.index(rect)] == 'Play Again':
-                                self.menu_ended = False
-                                return False
-                            elif words[rects.index(rect)] == "Options":
-                                self.game_ended = True  # todo: Create options menu
-                                return False
-                            elif (
-                                words[rects.index(rect)]
-                                in constants.buttons.hero_selection_menu["words"]
-                            ):
-                                self.menu_ended = True
-                                self.hero_select(words[rects.index(rect)])
+                            return button_options[rects.index(rect)].lower()
 
-            # if mouse is hovered on a button it changes to lighter shade
+            # If mouse is hovered on a button it changes to lighter shade
             for rect in rects:
                 if pygame.Rect.collidepoint(rect, mouse):
-                    pygame.draw.rect(self.screen, color_light, rect, 0)
+                    pygame.draw.rect(self.screen, menu["color_light"], rect, 0)
                 else:
-                    pygame.draw.rect(self.screen, color_dark, rect, 0)
+                    pygame.draw.rect(self.screen, menu["color_dark"], rect, 0)
 
-                # superimposing the text onto button
+                # Draw the text in the middle of button
+                button_text = self.font.render(
+                    button_options[rects.index(rect)], True, menu["color_text"]
+                )
                 self.screen.blit(
-                    smallfont.render(words[rects.index(rect)], True, color),
-                    (rect[0] + (rect[2] / 2), rect[1] + (rect[3] / 2)),
+                    button_text,
+                    (
+                        rect.centerx - button_text.get_width() // 2,
+                        rect.centery - button_text.get_height() // 2,
+                    ),
                 )
 
-            # updates the frames of the game
-            pygame.display.update()
+            # Update screen with recently drawn elements
+            pygame.display.flip()
 
-        if self.is_quit == True:
-            return False
+            # Keep a constant FPS rate
+            self.clock.tick(self.fps)
 
-        if self.hero_selection == True:
-            self.menu_ended = False
-            self.menu_loop()
-
-    def game_loop(self) -> None:
+    def game_loop(self) -> str:
         """Run each iteration of the game at a constant frame rate."""
         total_enemies = len(self.enemies)
-        while not self.game_ended:
+        while True:
             for event in pygame.event.get():
                 # Check if user clicks X button in window
                 if event.type == pygame.QUIT:
-                    self.is_quit = True
-                    return self.menu_loop()
+                    return "quit"
 
             # Fill screen with default background color
             self.screen.fill(self.bg_color)
@@ -248,16 +224,11 @@ class GameData:
 
             # Enter game over screen based on health_points value
             if self.hero.health_points <= 0:
-                self.game_over = True
-                self.menu_ended = False
-                return self.menu_loop()
+                return "game over"
+
             # Press escape key to enter pause menu
             elif keys[pygame.K_ESCAPE]:
-                self.pause = True
-                self.menu_ended = False
-                self.menu_loop()
-
-        pygame.quit()
+                return "pause"
 
     def draw(self, image: pygame.surface.Surface, rect: pygame.rect.Rect) -> None:
         """Position everything on screen depending on player's position."""

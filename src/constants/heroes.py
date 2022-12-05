@@ -1,24 +1,24 @@
-"""Constants for storing different classes of heros for the player to choose."""
+"""Constants for storing different classes of heroes for the player to choose."""
 
 heroes = {
-    "Orc 1": {
-        "position": (800, 500),
-        "image_paths": ["orc.png"],
-        "dimensions": (3 * 20, 3 * 32),
-        "base_speed": 3,
-        "health_points": 400,  # TODO: different classes can have different HPs and base attack forces
-        "damage_image": "orc_dmg.png",
-        "idle_image": "orc.png",
-        "attack_image": "orc_atk.png",
+    "cleric": {
+        "base_speed": 2,
+        "health_points": 600,
     },
-    "Orc 2": {
-        "position": (800, 500),
-        "image_paths": ["orc.png"],
-        "dimensions": (3 * 20, 3 * 32),
+    "orc": {
+        "base_speed": 2,
+        "health_points": 700,
+    },
+    "ranger": {
         "base_speed": 3,
-        "health_points": 400,  # TODO: different classes can have different HPs and base attack forces
-        "damage_image": "orc_dmg.png",
-        "idle_image": "orc.png",
-        "attack_image": "orc_atk.png",
+        "health_points": 500,
+    },
+    "rogue": {
+        "base_speed": 4,
+        "health_points": 300,
+    },
+    "wizard": {
+        "base_speed": 3,
+        "health_points": 400,
     },
 }
