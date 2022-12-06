@@ -7,7 +7,7 @@ import os
 def load_png(image_name: str) -> Tuple[pygame.surface.Surface, pygame.rect.Rect]:
     """Load image and return image object."""
     image_path = os.path.join(
-        os.path.split(os.path.dirname(os.path.abspath(__file__)))[0],
+        os.path.abspath(__file__ + "/../../../"),
         "assets",
         "img",
         image_name,

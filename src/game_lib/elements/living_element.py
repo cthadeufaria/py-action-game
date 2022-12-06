@@ -2,13 +2,8 @@
 import sys
 from typing import Tuple
 from .moving_element import MovingElement
+from ..utils.engine import load_png
 import pygame
-
-try:
-    sys.path.append("src")
-    from utils.engine import load_png
-except IndexError:
-    exit()
 
 
 class LivingElement(MovingElement):

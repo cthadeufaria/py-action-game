@@ -11,24 +11,24 @@ class InvalidInput(Exception):
 
 def get_direction() -> Tuple[int, int]:
     # Get pressed sword
-    direction = input('Where to move? [WASD] (X to exit) ').upper()
+    direction = input("Where to move? [WASD] (X to exit) ").upper()
 
     # Exit sword
-    if direction == 'X':
+    if direction == "X":
         raise ExitGame()
 
     # Invalid sword: clear the console and ask again
-    if direction not in ['W', 'A', 'S', 'D']:
+    if direction not in ["W", "A", "S", "D"]:
         raise InvalidInput
 
     # Valid sword
     else:
         # Determine new position
-        if direction == 'W':
+        if direction == "W":
             return -1, 0
-        if direction == 'A':
+        if direction == "A":
             return 0, -1
-        if direction == 'S':
+        if direction == "S":
             return 1, 0
-        if direction == 'D':
+        if direction == "D":
             return 0, 1
