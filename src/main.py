@@ -38,9 +38,11 @@ if __name__ == "__main__":
         font=font,
     )
 
-    while state != "quit":
-        if state == "play again" or state == "resume":
+    while state != "exit":
+        if state == "resume":
             state = game.game_loop()
+        elif state == "play again":
+            state = "main_menu" 
         elif state == "main_menu":
             state = game.menu_loop("main_menu")
         elif state == "play now":
@@ -56,6 +58,8 @@ if __name__ == "__main__":
             state = "resume"
         elif state == "options":
             # TODO: create options menu later
-            state = "quit"
+            state = "exit"
+        elif state == 'quit':
+            state = "main_menu"
 
     pygame.quit()

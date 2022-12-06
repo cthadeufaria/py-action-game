@@ -10,7 +10,7 @@ menus = {
         "buttons_spacement": 20,
         "button_width": 280,
         "button_height": 60,
-        "options": ("Play Now", "Options", "Quit"),
+        "options": ("Play Now", "Options", "Exit"),
     },
     "pause_menu": {
         "color_text": colors.WHITE,
