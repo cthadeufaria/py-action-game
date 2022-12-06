@@ -29,6 +29,7 @@ clock = pygame.time.Clock()
 # Entry point, game loop
 if __name__ == "__main__":
     state = "main_menu"
+    selected_role = 'orc'
     game = GameData(
         screen=screen,
         clock=clock,
@@ -47,9 +48,11 @@ if __name__ == "__main__":
         elif state == "pause":
             state = game.menu_loop("pause_menu")
         elif state == "game_over":
+            game.change_hero(selected_role)
             state = game.menu_loop("game_over_menu")
         elif state in [h.lower() for h in heroes.keys()]:
-            game.change_hero(state)
+            selected_role = state
+            game.change_hero(selected_role)
             state = "resume"
         elif state == "options":
             # TODO: create options menu later

@@ -230,7 +230,7 @@ class GameData:
 
             # Enter game over screen based on health_points value
             if self.hero.health_points <= 0:
-                return "game over"
+                return "game_over"
 
             # Press escape key to enter pause menu
             elif keys[pygame.K_ESCAPE]:
