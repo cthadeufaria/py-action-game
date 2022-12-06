@@ -21,12 +21,14 @@ class Enemy(LivingElement):
         image_paths: list[str],
         dimensions: Tuple[int, int],
         base_speed: int,
+        can_fly: bool,
         health_points: int,
         damage_image: str,
         idle_image: str,
         attack_force: int,
         rarity: float,
         is_follower: bool,
+        attack_image: str,
     ) -> None:
         """Initialize Enemy instance."""
         super().__init__(
@@ -37,6 +39,8 @@ class Enemy(LivingElement):
             health_points,
             damage_image,
             idle_image,
+            attack_image,
+            can_fly,
         )
         self.attack_force = attack_force
         self.rarity = rarity
@@ -79,4 +83,4 @@ class Enemy(LivingElement):
             (self.target[1] - self.rect.centery) / norm_v,
         )
 
-        self.move()
+        self.move([])

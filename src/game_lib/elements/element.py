@@ -39,3 +39,5 @@ class Element(pygame.sprite.Sprite):
     def is_colliding(self, elem: "Element") -> bool:
         """Check if element is colliding with another element."""
         return self.rect.colliderect(elem.rect)
+
+    # TODO: unit testing for colliding method
