@@ -11,8 +11,14 @@ class Collectable(Element):
         position: Tuple[int, int],
         image_paths: list[str],
         dimensions: Tuple[int, int],
+        hp: int,
         rarity: float,
     ) -> None:
         """Initialize Collectable instance."""
         self.rarity = rarity
+        hp.
         super().__init__(position, image_paths, dimensions)
+
+
+
+
