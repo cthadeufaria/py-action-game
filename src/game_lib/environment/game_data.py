@@ -1,13 +1,13 @@
 """Class that stores state of the game environment."""
 import os.path
-from typing import Tuple, TypedDict
+from typing import Tuple
 import pygame
 from .room import Room
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
 from constants.heroes import heroes
-from constants.buttons import menus
+from constants.buttons import menus, menu_type
 
 
 class GameData:
@@ -87,18 +87,6 @@ class GameData:
         mouse: Tuple[int, int]
         rects: list[pygame.Rect]
 
-        menu_type = TypedDict(
-            "menu_type",
-            {
-                "color_text": Tuple[int, int, int],
-                "color_light": Tuple[int, int, int],
-                "color_dark": Tuple[int, int, int],
-                "buttons_spacement": int,
-                "button_width": int,
-                "button_height": int,
-                "options": Tuple[str, ...],
-            },
-        )
         menu: menu_type = menus[menu_name]
 
         screen_width = self.screen.get_width()

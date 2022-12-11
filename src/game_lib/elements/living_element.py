@@ -1,5 +1,4 @@
 """Any MovingElement that has health points."""
-import sys
 from typing import Tuple
 from .moving_element import MovingElement
 from ..utils.engine import load_png

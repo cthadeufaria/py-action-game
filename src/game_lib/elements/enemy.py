@@ -1,5 +1,4 @@
 """Any LivingElement that can attack and be attacked by a Hero."""
-import sys
 from typing import Tuple
 from random import randint, random
 from .living_element import LivingElement

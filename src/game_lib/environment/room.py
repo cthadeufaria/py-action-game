@@ -1,15 +1,9 @@
 """Class that stores state of a limited space inside the game environment."""
-import sys
 import json
 from typing import Tuple
 from ..elements.hero import Hero
+from ..utils.engine import load_png, get_absolute_path
 import pygame
-
-try:
-    sys.path.append("src")
-    from utils.engine import load_png
-except IndexError:
-    exit()
 
 
 class Room:
@@ -19,7 +13,9 @@ class Room:
         """Initialize Room instance."""
         self.map_surface, self.map_rect = load_png(map_image_path)
 
-        with open(f"constants/{walls_file_path}") as walls_file:
+        with open(
+            get_absolute_path(__file__, "..", "..", "constants", walls_file_path)
+        ) as walls_file:
             walls_grid = json.load(walls_file)
             self.walls: list[pygame.Rect] = []
 

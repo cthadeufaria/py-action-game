@@ -1,6 +1,5 @@
 """Base class for everything visible on the map."""
 import pygame
-import sys
 from typing import Tuple
 from ..utils.engine import load_png
 
