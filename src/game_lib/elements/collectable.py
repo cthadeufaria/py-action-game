@@ -19,6 +19,8 @@ class Collectable(Element):
         self.heal_value = heal_value
         super().__init__(position, image_paths, dimensions)
 
+        if is_colldiding
+
 
 
 
