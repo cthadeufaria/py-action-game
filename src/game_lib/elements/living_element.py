@@ -2,6 +2,7 @@
 from typing import Tuple
 from .moving_element import MovingElement
 from ..utils.engine import load_png
+from constants.living_states import IDLE, REST, WALK, ATTACK, DIE, state_str
 import pygame
 
 
@@ -33,22 +34,20 @@ class LivingElement(MovingElement):
         self.attack_image = pygame.transform.scale(
             load_png(attack_image)[0], self.dimensions
         )
-        self.is_attacking = True
-        self.cooldown_frames = 0
 
-    def attack(self) -> None:
-        """Set is_attacking flag to True."""
-        self.is_attacking = True
+        self.state = IDLE
+        self.state_idx = 0
+        self.cooldown_frames = 0
 
     def check_attack(self, opponent: "LivingElement", attack_force: int) -> None:
         """Check if attacked and decrease health points."""
         if self.is_colliding(opponent):
-            if opponent.is_attacking:
+            if opponent.state == ATTACK:
                 self.health_points -= attack_force
                 self.image = self.damage_image
                 self.cooldown_frames = 8
 
-            if self.is_attacking:
+            if self.state == ATTACK:
                 opponent.health_points -= attack_force
                 opponent.image = opponent.damage_image
             else:
@@ -65,7 +64,7 @@ class LivingElement(MovingElement):
             opponent.is_dead = True
 
         # Return to idle image when cooldown is reached
-        if self.is_attacking:
+        if self.state == ATTACK:
             self.image = self.attack_image
         elif self.cooldown_frames == 0:
             self.image = self.idle_image

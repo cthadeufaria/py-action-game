@@ -13,9 +13,7 @@ def get_absolute_path(file: str, *path_strings: str) -> str:
 
 def load_png(image_name: str) -> Tuple[pygame.surface.Surface, pygame.rect.Rect]:
     """Load image and return image object."""
-    image_path = get_absolute_path(
-        __file__, "..", "..", "assets", "img", image_name
-    )
+    image_path = get_absolute_path(__file__, "..", "..", "assets", "img", image_name)
     try:
         image = pygame.image.load(image_path)
         if image.get_alpha is None:
