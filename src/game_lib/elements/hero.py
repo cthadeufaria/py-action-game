@@ -2,6 +2,7 @@
 from typing import Tuple
 from .living_element import LivingElement
 from .equipable import Equipable
+from constants.living_states import IDLE, REST, WALK, ATTACK, DIE, state_str
 import pygame.key
 from math import sqrt
 
@@ -31,7 +32,7 @@ class Hero(LivingElement):
             idle_image,
             attack_image,
         )
-        self.is_attacking = False
+        self.state = IDLE
         self.is_going_left = False
         self.current_weapon = Equipable(position, ["ball.png"], (10, 10), 0.1, 1, 1)
         self.inventory: list[Equipable] = []
@@ -67,9 +68,9 @@ class Hero(LivingElement):
             self.is_going_left = True
 
         # Verify if hero wants to attack
-        self.is_attacking = keys[pygame.K_v]
+        self.state = ATTACK if keys[pygame.K_v] else IDLE
 
-        if self.is_attacking:
+        if self.state == ATTACK:
             self.image = self.attack_image
         else:
             self.image = self.idle_image
@@ -77,6 +78,7 @@ class Hero(LivingElement):
         # Assign velocity, and normalize if necessary
         self.velocity = (vx, vy)
         if vx != 0 and vy != 0:
+            self.state = WALK
             self.velocity = (
                 round(mod_speed * vx / sqrt(vx**2 + vy**2)),
                 round(mod_speed * vy / sqrt(vx**2 + vy**2)),
