@@ -1,15 +1,9 @@
 """Any LivingElement that can attack and be attacked by a Hero."""
-import sys
 from typing import Tuple
 from random import randint, random
 from .living_element import LivingElement
+from ..utils.math import check_inside_circle
 from .hero import Hero
-
-try:
-    sys.path.append("src")
-    from utils.math import check_inside_circle
-except IndexError:
-    exit()
 
 
 class Enemy(LivingElement):

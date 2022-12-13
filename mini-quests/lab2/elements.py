@@ -15,10 +15,10 @@ class Element:
         self.x = pos[0]
         self.y = pos[1]
 
-    def is_adjacent_to(self, el: 'Element') -> bool:
+    def is_adjacent_to(self, el: "Element") -> bool:
         return abs(self.x - el.x) == 1 or abs(self.y - el.y) == 1
 
-    def is_overlapping(self, el: 'Element') -> bool:
+    def is_overlapping(self, el: "Element") -> bool:
         return (self.x == el.x) and (self.y == el.y)
 
 

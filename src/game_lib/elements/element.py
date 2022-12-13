@@ -1,13 +1,7 @@
 """Base class for everything visible on the map."""
 import pygame
-import sys
 from typing import Tuple
-
-try:
-    sys.path.append("src")
-    from utils.engine import load_png
-except IndexError:
-    exit()
+from ..utils.engine import load_png
 
 
 class Element(pygame.sprite.Sprite):

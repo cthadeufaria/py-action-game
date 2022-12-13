@@ -11,6 +11,7 @@ import constants.colors
 import constants.screen
 from constants.heroes import heroes
 from game_lib.environment.game_data import GameData
+from game_lib.utils.engine import get_absolute_path
 
 # Center window
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -21,7 +22,7 @@ pygame.init()
 # Set window name, size and default font
 pygame.display.set_caption("FEUPscape")
 screen = pygame.display.set_mode(constants.screen.dimensions["medium"])
-font = pygame.font.Font("assets/wonder.ttf", 25)
+font = pygame.font.Font(get_absolute_path(__file__, "assets", "wonder.ttf"), 25)
 
 # Create clock for game loop
 clock = pygame.time.Clock()

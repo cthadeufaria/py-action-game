@@ -1,8 +1,22 @@
 """Constants for controlling properties of buttons in menu screens."""
+from typing import Tuple, TypedDict
 import constants.colors as colors
 from constants.heroes import heroes
 
-menus = {
+menu_type = TypedDict(
+    "menu_type",
+    {
+        "color_text": Tuple[int, int, int],
+        "color_light": Tuple[int, int, int],
+        "color_dark": Tuple[int, int, int],
+        "buttons_spacement": int,
+        "button_width": int,
+        "button_height": int,
+        "options": Tuple[str, ...],
+    },
+)
+
+menus: dict[str, menu_type] = {
     "main_menu": {
         "color_text": colors.WHITE,
         "color_light": colors.LIGHT_RED,
