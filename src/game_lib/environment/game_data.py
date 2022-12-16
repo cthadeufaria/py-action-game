@@ -60,22 +60,97 @@ class GameData:
         # Initialize 40 randomly instantiated enemies
         # TODO: perhaps select difficulty level at the beginning and generate more/less enemies
         self.enemies = [
-            Enemy(
-                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
-                image_paths=["bat.png", "bat_dmg.png"],
-                dimensions=(40, 40),
-                base_speed=randint(5, 12),
-                health_points=10,
-                damage_image="bat_dmg.png",
-                idle_image="bat.png",
-                attack_image="bat.png",
-                attack_force=1,
-                rarity=0.5,
-                is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
-                can_fly=True,
-            )
-            for _ in range(40)
-        ]
+                *[Enemy(
+                    position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                    image_paths=["bat.png", "bat_dmg.png"],
+                    dimensions=(40, 40),
+                    base_speed=randint(5, 12),
+                    health_points=10,
+                    damage_image="bat_dmg.png",
+                    idle_image="bat.png",
+                    attack_image="bat.png",
+                    attack_force=1,
+                    rarity=0.5,
+                    is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                    can_fly=True,
+                )
+                for _ in range(10)],
+                *[Enemy(
+                    position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                    image_paths=["bat.png", "bat_dmg.png"],
+                    dimensions=(40, 40),
+                    base_speed=randint(5, 12),
+                    health_points=10,
+                    damage_image="bat_dmg.png",
+                    idle_image="bat.png",
+                    attack_image="bat.png",
+                    attack_force=1,
+                    rarity=0.5,
+                    is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                    can_fly=True,
+                )
+                for _ in range(10)],
+                *[Enemy(
+                    position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                    image_paths=["bat.png", "bat_dmg.png"],
+                    dimensions=(40, 40),
+                    base_speed=randint(5, 12),
+                    health_points=10,
+                    damage_image="bat_dmg.png",
+                    idle_image="bat.png",
+                    attack_image="bat.png",
+                    attack_force=1,
+                    rarity=0.5,
+                    is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                    can_fly=True,
+                )
+                for _ in range(10)],
+                *[Enemy(
+                    position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                    image_paths=["bat.png", "bat_dmg.png"],
+                    dimensions=(40, 40),
+                    base_speed=randint(5, 12),
+                    health_points=10,
+                    damage_image="bat_dmg.png",
+                    idle_image="bat.png",
+                    attack_image="bat.png",
+                    attack_force=1,
+                    rarity=0.5,
+                    is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                    can_fly=True,
+                )
+                for _ in range(10)],
+                *[Enemy(
+                    position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                    image_paths=["bat.png", "bat_dmg.png"],
+                    dimensions=(40, 40),
+                    base_speed=randint(5, 12),
+                    health_points=10,
+                    damage_image="bat_dmg.png",
+                    idle_image="bat.png",
+                    attack_image="bat.png",
+                    attack_force=1,
+                    rarity=0.5,
+                    is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                    can_fly=True,
+                )
+                for _ in range(10)],
+                *[Enemy(
+                    position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                    image_paths=["bat.png", "bat_dmg.png"],
+                    dimensions=(40, 40),
+                    base_speed=randint(5, 12),
+                    health_points=10,
+                    damage_image="bat_dmg.png",
+                    idle_image="bat.png",
+                    attack_image="bat.png",
+                    attack_force=1,
+                    rarity=0.5,
+                    is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                    can_fly=True,
+                )
+                for _ in range(10)],
+            ]
 
     def change_hero(self, role: str) -> None:
         """Create new hero object based on selected role."""

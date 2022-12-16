@@ -53,4 +53,13 @@ menus: dict[str, menu_type] = {
         "button_height": 60,
         "options": tuple(heroes.keys()),
     },
+    "options_menu": {
+        "color_text": colors.WHITE,
+        "color_light": colors.LIGHT_RED,
+        "color_dark": colors.RED,
+        "buttons_spacement": 20,
+        "button_width": 280,
+        "button_height": 60,
+        "options": ('Volume Up', 'Volume Down', 'Quit'),
+    },
 }

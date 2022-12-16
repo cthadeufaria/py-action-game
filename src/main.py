@@ -58,9 +58,14 @@ if __name__ == "__main__":
             game.change_hero(selected_role)
             state = "resume"
         elif state == "options":
-            # TODO: create options menu later
-            state = "exit"
+            state = game.menu_loop('options_menu')
         elif state == 'quit':
             state = "main_menu"
+        elif state == 'volume up':
+            print('higher volume')
+            state = 'options'
+        elif state == 'volume down':
+            print('lower volume')
+            state = 'options'
 
     pygame.quit()
