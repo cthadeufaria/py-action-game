@@ -58,6 +58,7 @@ class LivingElement(MovingElement):
     def display_health_bar(
         self, screen: pygame.surface.Surface, offset: Tuple[int, int]
     ) -> None:
+        """Draw a bar above the LivingElement that represents its current health points."""
         bar_size = (30, 10)
 
         health_bar_rect = pygame.Rect(0, 0, *bar_size)

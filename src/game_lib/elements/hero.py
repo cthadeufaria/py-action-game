@@ -4,6 +4,7 @@ from .living_element import LivingElement
 from .equipable import Equipable
 from constants.living_states import IDLE, REST, WALK, ATTACK, DIE, state_str
 from constants.colors import BLACK, RED, GREEN
+from ..environment.sound import hero_cry
 import pygame.key
 from math import sqrt
 
@@ -42,7 +43,9 @@ class Hero(LivingElement):
         self.is_recovering = False
 
         # TODO: change/refactor to simpler weapon structure
-        self.current_weapon = Equipable(position, ["ball.png"], (10, 10), 0.1, base_attack, 1)
+        self.current_weapon = Equipable(
+            position, ["ball.png"], (10, 10), 0.1, base_attack, 1
+        )
         self.inventory: list[Equipable] = []
 
     def equip(self, eq_number: int) -> None:
@@ -107,6 +110,7 @@ class Hero(LivingElement):
                 opponent.image = opponent.idle_image
                 self.image = self.damage_image
                 self.cooldown_frames = 8
+                hero_cry()
 
         # Return to idle image when cooldown is reached
         if self.state == ATTACK:

@@ -12,6 +12,7 @@ import constants.screen
 from constants.heroes import heroes
 from game_lib.environment.game_data import GameData
 from game_lib.utils.engine import get_absolute_path
+import game_lib.environment.sound
 
 # Center window
 os.environ["SDL_VIDEO_CENTERED"] = "1"
