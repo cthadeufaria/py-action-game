@@ -1,6 +1,6 @@
 """Class that stores state of the game environment."""
 import os.path
-from typing import Tuple, TypedDict
+from typing import Tuple
 import pygame
 from .room import Room
 from ..elements.collectable import Collectable
@@ -8,7 +8,7 @@ from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
 from constants.heroes import heroes
-from constants.buttons import menus
+from constants.buttons import menus, menu_type
 
 
 class GameData:
@@ -29,30 +29,6 @@ class GameData:
         self.bg_color = bg_color
         self.font = font
 
-        pygame.mixer.init()
-
-        # Create sound channels
-        soundtrack_channel = pygame.mixer.Channel(0)
-        hero_effects_channel = pygame.mixer.Channel(1)
-        enemy_effects_channel = pygame.mixer.Channel(2)
-        special_effects_channel = pygame.mixer.Channel(3)
-
-        # Set up sound files
-        soundtrack = pygame.mixer.Sound("soundtrack.mp3")
-        melee_attack = pygame.mixer.Sound("foom_0.mp3")
-        ranged_attack = pygame.mixer.Sound("bow.mp3")
-        blood_splash = pygame.mixer.Sound("blood2.mp3")
-        enemy_cry = pygame.mixer.Sound("enemy_cry.mp3")
-        hero_heal = pygame.mixer.Sound("instant_heal.mp3")
-        collect_coin = pygame.mixer.Sound("collect_coin.mp3")
-        minotaur_drums = pygame.mixer.Sound("minotaur_drums.mp3")
-        room_ambience = pygame.mixer.Sound("room_ambience.mp3")
-        getting_hit = pygame.mixer.Sound("getting_hit.mp3")
-        open_menu = pygame.mixer.Sound("open_menu.mp3")
-        close_menu = pygame.mixer.Sound("close_menu.mp3")
-        mouseover = pygame.mixer.Sound("mouseover.mp3")
-        death_cry = pygame.mixer.Sound("death_cry.mp3")
-        completed_boss = pygame.mixer.Sound("completed_boss.mp3")
 
         # Init temporary / default Hero
         self.hero = Hero(
@@ -61,9 +37,17 @@ class GameData:
             dimensions=(3 * 32, 3 * 32),
             base_speed=3,
             health_points=400,
+            stamina=400,
+            base_attack=10,
             damage_image="orc_dmg.png",
             idle_image="orc.png",
             attack_image="orc_atk.png",
+        )
+
+        # Set offset when drawing elements on screen relative to the hero
+        self.blit_offset = (
+            self.screen.get_size()[0] // 2 - self.hero.rect.centerx,
+            self.screen.get_size()[1] // 2 - self.hero.rect.centery,
         )
 
         # Instance the main room
@@ -103,7 +87,6 @@ class GameData:
                 dimensions=(15, 15),
                 rarity=0.5,
                 heal_value=100,
-                collectable_image="collectable_image.png"
             )
             for _ in range(5)
         ]
@@ -116,6 +99,8 @@ class GameData:
             dimensions=(3 * 32, 3 * 32),
             base_speed=heroes[role]["base_speed"],
             health_points=heroes[role]["health_points"],
+            stamina=heroes[role]["stamina"],
+            base_attack=heroes[role]["base_attack"],
             damage_image=os.path.join("heroes", role, "male", "die_3.png"),
             idle_image=os.path.join("heroes", role, "male", "walk_3.png"),
             attack_image=os.path.join("heroes", role, "male", "attack_3.png"),
@@ -126,18 +111,6 @@ class GameData:
         mouse: Tuple[int, int]
         rects: list[pygame.Rect]
 
-        menu_type = TypedDict(
-            "menu_type",
-            {
-                "color_text": Tuple[int, int, int],
-                "color_light": Tuple[int, int, int],
-                "color_dark": Tuple[int, int, int],
-                "buttons_spacement": int,
-                "button_width": int,
-                "button_height": int,
-                "options": Tuple[str, ...],
-            },
-        )
         menu: menu_type = menus[menu_name]
 
         screen_width = self.screen.get_width()
@@ -212,6 +185,12 @@ class GameData:
                 if event.type == pygame.QUIT:
                     return "quit"
 
+            # Update drawing offset
+            self.blit_offset = (
+                self.screen.get_size()[0] // 2 - self.hero.rect.centerx,
+                self.screen.get_size()[1] // 2 - self.hero.rect.centery,
+            )
+
             # Fill screen with default background color
             self.screen.fill(self.bg_color)
 
@@ -225,8 +204,10 @@ class GameData:
                 )
             else:
                 self.draw(self.hero.image, self.hero.rect)
+
             self.hero.get_input()
             self.hero.move(self.game_room.walls)
+            self.hero.display_health_bar(self.screen, self.blit_offset)
 
             remaining_potions = []
             for potion in self.potions:
@@ -248,18 +229,19 @@ class GameData:
                 # Check for attacks against hero
                 self.hero.check_attack(enemy, enemy.attack_force)
 
-                if not enemy.is_dead:
+                enemy.display_health_bar(self.screen, self.blit_offset)
+
+                if not enemy.is_dead():
                     alive_enemies.append(enemy)
 
             self.enemies = alive_enemies
 
             self.game_room.position_walls(self.screen, self.hero)
 
-            # Display HP
-            self.screen.blit(
-                self.font.render(f"HP {self.hero.health_points}", True, "White"),
-                (10, 10),
-            )
+            # Display stamina
+            self.screen.blit(self.font.render("Stamina", True, "White"), (10, 10))
+            self.hero.display_stamina_bar(self.screen)
+
             # Display points
             self.screen.blit(
                 self.font.render(
@@ -290,11 +272,7 @@ class GameData:
         self.screen.blit(
             image,
             (
-                rect.topleft[0]
-                - self.hero.rect.centerx
-                + self.screen.get_size()[0] // 2,
-                rect.topleft[1]
-                - self.hero.rect.centery
-                + self.screen.get_size()[1] // 2,
+                rect.topleft[0] + self.blit_offset[0],
+                rect.topleft[1] + self.blit_offset[1],
             ),
         )
