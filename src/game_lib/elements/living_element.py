@@ -53,7 +53,12 @@ class LivingElement(MovingElement):
 
     def heal(self, hp: int) -> None:
         """Heal living element increasing health points."""
-        pass
+        if hp >= (self.max_health_points - hp):
+            self.health_points = self.max_health_points
+        else:
+            self.health_points += hp
+
+
 
     def display_health_bar(
         self, screen: pygame.surface.Surface, offset: Tuple[int, int]
@@ -85,3 +90,4 @@ class LivingElement(MovingElement):
                 bar_size[1] - 2,
             ),
         )
+

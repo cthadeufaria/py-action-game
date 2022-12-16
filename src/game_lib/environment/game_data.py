@@ -3,6 +3,7 @@ import os.path
 from typing import Tuple
 import pygame
 from .room import Room
+from ..elements.collectable import Collectable
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
@@ -27,6 +28,7 @@ class GameData:
         self.fps = fps
         self.bg_color = bg_color
         self.font = font
+
 
         # Init temporary / default Hero
         self.hero = Hero(
@@ -152,6 +154,18 @@ class GameData:
                 for _ in range(10)],
             ]
 
+        # Initialize 5 randomly instantiated potions
+        self.potions = [
+            Collectable(
+                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                image_paths=["ball.png"],
+                dimensions=(15, 15),
+                rarity=0.5,
+                heal_value=100,
+            )
+            for _ in range(5)
+        ]
+
     def change_hero(self, role: str) -> None:
         """Create new hero object based on selected role."""
         self.hero = Hero(
@@ -269,6 +283,16 @@ class GameData:
             self.hero.get_input()
             self.hero.move(self.game_room.walls)
             self.hero.display_health_bar(self.screen, self.blit_offset)
+
+            remaining_potions = []
+            for potion in self.potions:
+                self.draw(potion.image, potion.rect)
+                if self.hero.is_colliding(potion):
+                    self.hero.heal(potion.heal_value)
+                else:
+                    remaining_potions.append(potion)
+            self.potions = remaining_potions
+
 
             # For each enemy
             alive_enemies = []
