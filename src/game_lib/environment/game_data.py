@@ -3,6 +3,7 @@ import os.path
 from typing import Tuple, TypedDict
 import pygame
 from .room import Room
+from ..elements.collectable import Collectable
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
@@ -92,6 +93,19 @@ class GameData:
                 can_fly=True,
             )
             for _ in range(40)
+        ]
+
+        # Initialize 5 randomly instantiated potions
+        self.potions = [
+            Collectable(
+                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                image_paths=["ball.png"],
+                dimensions=(15, 15),
+                rarity=0.5,
+                heal_value=100,
+                collectable_image="collectable_image.png"
+            )
+            for _ in range(5)
         ]
 
     def change_hero(self, role: str) -> None:
@@ -213,6 +227,16 @@ class GameData:
                 self.draw(self.hero.image, self.hero.rect)
             self.hero.get_input()
             self.hero.move(self.game_room.walls)
+
+            remaining_potions = []
+            for potion in self.potions:
+                self.draw(potion.image, potion.rect)
+                if self.hero.is_colliding(potion):
+                    self.hero.heal(potion.heal_value)
+                else:
+                    remaining_potions.append(potion)
+            self.potions = remaining_potions
+
 
             # For each enemy
             alive_enemies = []

@@ -1,6 +1,10 @@
 """Any Element that does not move and can be put in the inventory."""
+import pygame
+
 from .element import Element
 from typing import Tuple
+
+
 
 
 class Collectable(Element):
@@ -15,12 +19,14 @@ class Collectable(Element):
         rarity: float,
     ) -> None:
         """Initialize Collectable instance."""
+        super().__init__(position, image_paths, dimensions)
         self.rarity = rarity
         self.heal_value = heal_value
-        super().__init__(position, image_paths, dimensions)
 
-        if self.is_colliding(self, hero: "Hero"):
-            hero.heal(heal_value)
+
+
+
+
 
 
 
