@@ -19,7 +19,9 @@ class Collectable(Element):
         self.heal_value = heal_value
         super().__init__(position, image_paths, dimensions)
 
-        if is_colldiding
+        if self.is_colliding(self, hero: "Hero"):
+            hero.heal(heal_value)
+
 
 
 
