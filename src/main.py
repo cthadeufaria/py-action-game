@@ -46,10 +46,12 @@ if __name__ == "__main__":
         elif state == "play again":
             state = "main_menu" 
         elif state == "main_menu":
+            last_state = state
             state = game.menu_loop("main_menu")
         elif state == "play now":
             state = game.menu_loop("hero_selection_menu")
         elif state == "pause":
+            last_state = state
             state = game.menu_loop("pause_menu")
         elif state == "game_over":
             game.change_hero(selected_role)
@@ -70,5 +72,7 @@ if __name__ == "__main__":
             game.volume_control('down')
             print('lower volume')
             state = 'options'
+        elif state == 'back':
+            state = last_state
 
     pygame.quit()
