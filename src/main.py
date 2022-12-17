@@ -31,6 +31,7 @@ clock = pygame.time.Clock()
 # Entry point, game loop
 if __name__ == "__main__":
     state = "main_menu"
+    last_state = state
     selected_role = 'orc'
     game = GameData(
         screen=screen,
@@ -65,12 +66,10 @@ if __name__ == "__main__":
         elif state == 'quit':
             state = "main_menu"
         elif state == 'volume up':
-            print('higher volume')
             game.volume_control('up')
             state = 'options'
         elif state == 'volume down':
             game.volume_control('down')
-            print('lower volume')
             state = 'options'
         elif state == 'back':
             state = last_state

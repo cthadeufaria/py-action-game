@@ -58,7 +58,7 @@ menus: dict[str, menu_type] = {
         "color_light": colors.LIGHT_RED,
         "color_dark": colors.RED,
         "buttons_spacement": 20,
-        "button_width": 280,
+        "button_width": 300,
         "button_height": 60,
         "options": ('Volume Up', 'Volume Down', 'Back', 'Quit'),
     },
