@@ -9,6 +9,7 @@ from ..elements.enemy import Enemy
 from random import randint, random
 from constants.heroes import heroes
 from constants.buttons import menus, menu_type
+from sound import volume
 
 
 class GameData:
@@ -54,6 +55,9 @@ class GameData:
         self.game_room = Room(
             walls_file_path="walls.json", map_image_path="feup_map.png"
         )
+
+        # Set game's base volume
+        self.base_volume = 1.0
 
         # Get room dimensions
         w, h = self.game_room.map_rect.w, self.game_room.map_rect.h
@@ -250,6 +254,14 @@ class GameData:
 
             # Keep a constant FPS rate
             self.clock.tick(self.fps)
+
+    def volume_control(self, direction: str) -> None:
+        """Change main base volume for each button click."""
+        if direction == 'up':
+            self.base_volume = self.base_volume + 0.1
+        elif direction == 'down':
+            self.base_volume = self.base_volume - 0.1
+        volume(self.base_volume)
 
     def game_loop(self) -> str:
         """Run each iteration of the game at a constant frame rate."""

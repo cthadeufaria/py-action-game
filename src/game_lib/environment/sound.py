@@ -35,7 +35,8 @@ death_cry = get_sound_file("death_cry.mp3")
 completed_boss = get_sound_file("completed_boss.mp3")
 
 # Adjust volumes
-hero_effects_channel.set_volume(0.9)
+def volume(base_volume: float) -> None:
+    hero_effects_channel.set_volume(base_volume)
 
 # play sound
 soundtrack_channel.play(soundtrack, loops=-1)  # Repeat forever
