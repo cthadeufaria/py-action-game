@@ -36,7 +36,10 @@ completed_boss = get_sound_file("completed_boss.mp3")
 
 # Adjust volumes
 def volume(base_volume: float) -> None:
+    soundtrack_channel.set_volume(base_volume)
     hero_effects_channel.set_volume(base_volume)
+    enemy_effects_channel.set_volume(base_volume)
+    special_effects_channel.set_volume(base_volume)
 
 # play sound
 soundtrack_channel.play(soundtrack, loops=-1)  # Repeat forever
