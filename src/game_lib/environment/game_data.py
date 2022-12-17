@@ -162,7 +162,7 @@ class GameData:
         self.potions = [
             Collectable(
                 position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
-                image_paths=["ball.png"],
+                image_paths=["potion.png"],
                 dimensions=(15, 15),
                 rarity=0.5,
                 heal_value=100,
