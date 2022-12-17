@@ -23,14 +23,14 @@ def split_image(image_path, rows=10, cols=10):
             box = (j * row_width, i * row_height, j * row_width +
                    row_width, i * row_height + row_height)
             outp = im.crop(box)
-            outp_name = f'{actions[n // 10]}_{n % 10}{ext}'
+            outp_name = f'{actions[n // cols]}_{n % cols}{ext}'
             print("Exporting image tile: " + outp_name)
             if i < rows // 2:
                 outp.save(os.path.join(name, 'male', outp_name))
             else:
                 outp.save(os.path.join(name, 'female', outp_name))
             n += 1
-            n = n % 50
+            n = n % ((rows*cols)//2)
 
 
 if __name__ == "__main__":
