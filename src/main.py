@@ -2,6 +2,7 @@
 
 # Standard module imports
 import os
+import multiprocessing
 
 # Third-party imports
 import pygame
@@ -12,7 +13,10 @@ import constants.screen
 from constants.heroes import heroes
 from game_lib.environment.game_data import GameData
 from game_lib.utils.engine import get_absolute_path
-import game_lib.environment.sound
+from game_lib.utils.credentials import get_credentials, set_credentials
+from game_lib.universal.auth_player import AuthPlayer
+# import game_lib.environment.sound
+from game_lib.universal.input_credentials import InputCredentials
 
 # Center window
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -31,6 +35,31 @@ clock = pygame.time.Clock()
 # Entry point, game loop
 if __name__ == "__main__":
     state = "main_menu"
+
+    # Get user credentials and log user in
+    auth = AuthPlayer('hero')
+    credentials = get_credentials()
+    if not credentials:
+        input_menu = InputCredentials(
+            screen=screen,
+            clock=clock,
+            font=font,
+            fps=constants.screen.FPS,
+            bg_color=constants.colors.GREEN,
+        )
+        name, email, password = input_menu.input_loop()
+        if not email or not password:
+            state = 'exit'
+        else:
+            set_credentials(name, email, password)
+            auth = AuthPlayer(name=name)
+            auth.create_user(email, password)
+    else:
+        name, email, password = credentials['name'], credentials['email'], credentials['password']
+        auth = AuthPlayer(name=name)
+
+    auth.login(email, password)
+
     last_state = state
     selected_role = "orc"
     game = GameData(
@@ -39,6 +68,7 @@ if __name__ == "__main__":
         fps=constants.screen.FPS,
         bg_color=constants.colors.GRASS,
         font=font,
+        auth=auth
     )
 
     while state != "exit":

@@ -5,6 +5,7 @@ from .room import Room
 from ..elements.collectable import Collectable
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
+from ..universal.auth_player import AuthPlayer
 from random import randint, random, choice
 from constants.heroes import heroes
 from constants.enemies import enemies
@@ -22,6 +23,7 @@ class GameData:
         fps: int,
         bg_color: Tuple[int, int, int],
         font: pygame.font.Font,
+        auth: AuthPlayer
     ) -> None:
         """Initialize GameData instance."""
         self.screen = screen
@@ -29,6 +31,8 @@ class GameData:
         self.fps = fps
         self.bg_color = bg_color
         self.font = font
+        self.auth = auth
+        self.db_cooldown = 0
 
         # Init temporary / default Hero
         self.hero = Hero(
@@ -326,10 +330,17 @@ class GameData:
             # Display points
             self.screen.blit(
                 self.font.render(
-                    f"Points {5 * (total_enemies - len(self.enemies))}", True, "White"
+                    f"Your Points {5 * (total_enemies - len(self.enemies))}", True, "Red"
                 ),
                 (self.screen.get_width() - 200, self.screen.get_height() - 50),
             )
+            for user_idx, user_id in enumerate(self.auth.ranking.keys()):
+                self.screen.blit(
+                    self.font.render(
+                        f"{self.auth.ranking[user_id]['name']}: {self.auth.ranking[user_id]['points']}", True, "White"
+                    ),
+                    (self.screen.get_width() - 200, self.screen.get_height() - (50 * (2 + user_idx))),
+                )
 
             # Update screen with recently drawn elements
             pygame.display.flip()
@@ -347,6 +358,13 @@ class GameData:
             # Press escape key to enter pause menu
             elif keys[pygame.K_ESCAPE]:
                 return "pause"
+
+            # Every 30 seconds update DB and query ranking
+            self.db_cooldown += 1
+            if self.db_cooldown > self.fps * 30:
+                self.auth.query_ranking()
+                self.auth.update_player_data(points=5 * (total_enemies - len(self.enemies)), pos=self.hero.position)
+                self.db_cooldown = 0
 
     def draw(self, image: pygame.surface.Surface, rect: pygame.rect.Rect) -> None:
         """Position everything on screen depending on player's position."""

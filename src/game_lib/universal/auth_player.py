@@ -1,6 +1,6 @@
 """Class that stores information about an authenticated user."""
 from typing import Tuple, TypedDict
-import firebase
+import firebase  # type: ignore
 
 ranking_type = TypedDict(
     "ranking_type", {"name": str, "points": int, "position": Tuple[int, int]}
@@ -48,26 +48,20 @@ class AuthPlayer:
         user = self.auth.sign_in_with_email_and_password(email, password)
         self.user_id = user["localId"]
         self.refresh_token = user["refreshToken"]
-        self._subscribe_to_ranking()
+        self.query_ranking()
 
     def renew_token(self) -> None:
         """Renew token to keep user authenticated before its 1-hour expiration."""
         user = self.auth.refresh(self.refresh_token)
         self.refresh_token = user["refreshToken"]
 
-    def _subscribe_to_ranking(self) -> None:
+    def query_ranking(self) -> None:
         """Create snapshot listener to Firestore ranking doc."""
         if not bool(self.user_id):
             raise Exception("User is not authenticated")
 
-        # def stream_handler(message):
-        #     print(message)
-        #     self.ranking = message["data"]
-        #
-        # self.db.child("ranking").stream(stream_handler)
-
         res = self.db.child("ranking").get()
-        print(res.val())
+        self.ranking = dict(res.val())
 
     def update_player_data(self, points: int, pos: Tuple[int, int]) -> None:
         """Update player's points in Firestore ranking doc."""
@@ -75,5 +69,5 @@ class AuthPlayer:
             raise Exception("User is not authenticated")
 
         self.db.child("ranking").child(self.user_id).update(
-            {"points": points, "position": pos}
+            {"name": self.name, "points": points, "position": pos}
         )
