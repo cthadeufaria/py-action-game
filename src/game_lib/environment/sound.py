@@ -41,6 +41,7 @@ def volume(base_volume: float) -> None:
     enemy_effects_channel.set_volume(base_volume)
     special_effects_channel.set_volume(base_volume)
 
+
 # play sound
 soundtrack_channel.play(soundtrack, loops=-1)  # Repeat forever
 

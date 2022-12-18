@@ -30,7 +30,6 @@ class GameData:
         self.bg_color = bg_color
         self.font = font
 
-
         # Init temporary / default Hero
         self.hero = Hero(
             position=(800, 500),
@@ -66,7 +65,8 @@ class GameData:
         # Initialize 40 randomly instantiated enemies
         # TODO: perhaps select difficulty level at the beginning and generate more/less enemies
         self.enemies = [
-                *[Enemy(
+            *[
+                Enemy(
                     position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                     image_paths=["bat.png", "bat_dmg.png"],
                     dimensions=(40, 40),
@@ -80,8 +80,10 @@ class GameData:
                     is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
                     can_fly=True,
                 )
-                for _ in range(10)],
-                *[Enemy(
+                for _ in range(10)
+            ],
+            *[
+                Enemy(
                     position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                     image_paths=["bat.png", "bat_dmg.png"],
                     dimensions=(40, 40),
@@ -95,8 +97,10 @@ class GameData:
                     is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
                     can_fly=True,
                 )
-                for _ in range(10)],
-                *[Enemy(
+                for _ in range(10)
+            ],
+            *[
+                Enemy(
                     position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                     image_paths=["bat.png", "bat_dmg.png"],
                     dimensions=(40, 40),
@@ -110,8 +114,10 @@ class GameData:
                     is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
                     can_fly=True,
                 )
-                for _ in range(10)],
-                *[Enemy(
+                for _ in range(10)
+            ],
+            *[
+                Enemy(
                     position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                     image_paths=["bat.png", "bat_dmg.png"],
                     dimensions=(40, 40),
@@ -125,8 +131,10 @@ class GameData:
                     is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
                     can_fly=True,
                 )
-                for _ in range(10)],
-                *[Enemy(
+                for _ in range(10)
+            ],
+            *[
+                Enemy(
                     position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                     image_paths=["bat.png", "bat_dmg.png"],
                     dimensions=(40, 40),
@@ -140,8 +148,10 @@ class GameData:
                     is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
                     can_fly=True,
                 )
-                for _ in range(10)],
-                *[Enemy(
+                for _ in range(10)
+            ],
+            *[
+                Enemy(
                     position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
                     image_paths=["bat.png", "bat_dmg.png"],
                     dimensions=(40, 40),
@@ -155,8 +165,9 @@ class GameData:
                     is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
                     can_fly=True,
                 )
-                for _ in range(10)],
-            ]
+                for _ in range(10)
+            ],
+        ]
 
         # Initialize 5 randomly instantiated potions
         self.potions = [
@@ -257,9 +268,9 @@ class GameData:
 
     def volume_control(self, direction: str) -> None:
         """Change main base volume for each button click."""
-        if direction == 'up':
+        if direction == "up":
             self.base_volume = self.base_volume + 0.1
-        elif direction == 'down':
+        elif direction == "down":
             self.base_volume = self.base_volume - 0.1
         sound.volume(self.base_volume)
 
@@ -304,7 +315,6 @@ class GameData:
                 else:
                     remaining_potions.append(potion)
             self.potions = remaining_potions
-
 
             # For each enemy
             alive_enemies = []

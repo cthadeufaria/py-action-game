@@ -60,6 +60,6 @@ menus: dict[str, menu_type] = {
         "buttons_spacement": 20,
         "button_width": 300,
         "button_height": 60,
-        "options": ('Volume Up', 'Volume Down', 'Back', 'Quit'),
+        "options": ("Volume Up", "Volume Down", "Back", "Quit"),
     },
 }

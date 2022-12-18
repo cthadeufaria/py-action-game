@@ -85,4 +85,3 @@ class LivingElement(MovingElement):
                 bar_size[1] - 2,
             ),
         )
-
