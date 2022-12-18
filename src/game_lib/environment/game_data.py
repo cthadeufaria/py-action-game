@@ -1,12 +1,13 @@
 """Class that stores state of the game environment."""
-from typing import Tuple, TypedDict
 import pygame
+from random import randint, random, choice
+from typing import Tuple, TypedDict
 from .room import Room
 from ..elements.collectable import Collectable
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from ..universal.auth_player import AuthPlayer
-from random import randint, random, choice
+from ..utils.engine import load_png
 from constants.heroes import heroes
 from constants.enemies import enemies
 from constants.buttons import menus, menu_type
@@ -23,7 +24,7 @@ class GameData:
         fps: int,
         bg_color: Tuple[int, int, int],
         font: pygame.font.Font,
-        auth: AuthPlayer
+        auth: AuthPlayer,
     ) -> None:
         """Initialize GameData instance."""
         self.screen = screen
@@ -76,7 +77,7 @@ class GameData:
                 "following_probability": float,
             },
         )
-        enemies_dict: dict[str, enemies_type] = enemies
+        enemies_dict: dict[str, enemies_type] = enemies  # type: ignore
         self.enemies = [
             Enemy(  # Final boss
                 position=(4 * w // 5, h // 2),
@@ -153,6 +154,12 @@ class GameData:
         button_options = menu["options"]
         rects = []
 
+        menu_image, _ = (
+            load_png("roles_menu.png")
+            if menu_name == "hero_selection_menu"
+            else load_png("default_menu.png")
+        )
+
         # Create list with one rectangle for each button
         for idx in range(len(button_options)):
             rects.append(
@@ -167,8 +174,8 @@ class GameData:
             )
 
         while True:
-            # fills the screen with a color - TODO: put image instead
-            self.screen.fill((50, 50, 50))
+            # Set background image
+            self.screen.blit(menu_image, (0, 0))
 
             # stores the (x,y) coordinates into the variable as a tuple
             mouse = pygame.mouse.get_pos()
@@ -330,16 +337,23 @@ class GameData:
             # Display points
             self.screen.blit(
                 self.font.render(
-                    f"Your Points {5 * (total_enemies - len(self.enemies))}", True, "Red"
+                    f"Your Points {5 * (total_enemies - len(self.enemies))}",
+                    True,
+                    "Red",
                 ),
                 (self.screen.get_width() - 200, self.screen.get_height() - 50),
             )
             for user_idx, user_id in enumerate(self.auth.ranking.keys()):
                 self.screen.blit(
                     self.font.render(
-                        f"{self.auth.ranking[user_id]['name']}: {self.auth.ranking[user_id]['points']}", True, "White"
+                        f"{self.auth.ranking[user_id]['name']}: {self.auth.ranking[user_id]['points']}",
+                        True,
+                        "White",
                     ),
-                    (self.screen.get_width() - 200, self.screen.get_height() - (50 * (2 + user_idx))),
+                    (
+                        self.screen.get_width() - 200,
+                        self.screen.get_height() - (50 * (2 + user_idx)),
+                    ),
                 )
 
             # Update screen with recently drawn elements
@@ -363,7 +377,10 @@ class GameData:
             self.db_cooldown += 1
             if self.db_cooldown > self.fps * 30:
                 self.auth.query_ranking()
-                self.auth.update_player_data(points=5 * (total_enemies - len(self.enemies)), pos=self.hero.position)
+                self.auth.update_player_data(
+                    points=5 * (total_enemies - len(self.enemies)),
+                    pos=self.hero.position,
+                )
                 self.db_cooldown = 0
 
     def draw(self, image: pygame.surface.Surface, rect: pygame.rect.Rect) -> None:

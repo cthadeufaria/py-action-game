@@ -2,7 +2,6 @@
 
 # Standard module imports
 import os
-import multiprocessing
 
 # Third-party imports
 import pygame
@@ -15,6 +14,7 @@ from game_lib.environment.game_data import GameData
 from game_lib.utils.engine import get_absolute_path
 from game_lib.utils.credentials import get_credentials, set_credentials
 from game_lib.universal.auth_player import AuthPlayer
+
 # import game_lib.environment.sound
 from game_lib.universal.input_credentials import InputCredentials
 
@@ -37,25 +37,26 @@ if __name__ == "__main__":
     state = "main_menu"
 
     # Get user credentials and log user in
-    auth = AuthPlayer('hero')
+    auth = AuthPlayer("hero")
     credentials = get_credentials()
     if not credentials:
         input_menu = InputCredentials(
-            screen=screen,
-            clock=clock,
-            font=font,
-            fps=constants.screen.FPS,
-            bg_color=constants.colors.GREEN,
+            screen=screen, clock=clock, font=font, fps=constants.screen.FPS
         )
         name, email, password = input_menu.input_loop()
-        if not email or not password:
-            state = 'exit'
+        if not name or not email or not password:
+            pygame.quit()
+            exit()
         else:
             set_credentials(name, email, password)
             auth = AuthPlayer(name=name)
             auth.create_user(email, password)
     else:
-        name, email, password = credentials['name'], credentials['email'], credentials['password']
+        name, email, password = (
+            credentials["name"],
+            credentials["email"],
+            credentials["password"],
+        )
         auth = AuthPlayer(name=name)
 
     auth.login(email, password)
@@ -68,7 +69,7 @@ if __name__ == "__main__":
         fps=constants.screen.FPS,
         bg_color=constants.colors.GRASS,
         font=font,
-        auth=auth
+        auth=auth,
     )
 
     while state != "exit":
