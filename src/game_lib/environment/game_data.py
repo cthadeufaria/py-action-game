@@ -2,11 +2,13 @@
 from typing import Tuple
 import pygame
 from .room import Room
+from ..elements.collectable import Collectable
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from random import randint, random
 from constants.heroes import heroes
 from constants.buttons import menus, menu_type
+import game_lib.environment.sound as sound
 
 
 class GameData:
@@ -49,6 +51,9 @@ class GameData:
             walls_file_path="walls.json", map_image_path="feup_map.png"
         )
 
+        # Set game's base volume
+        self.base_volume = 1.0
+
         # Get room dimensions
         w, h = self.game_room.map_rect.w, self.game_room.map_rect.h
         self.temp_tile_size = 10
@@ -68,6 +73,18 @@ class GameData:
                 can_fly=False,
             )
             for _ in range(10)
+        ]
+
+        # Initialize 5 randomly instantiated potions
+        self.potions = [
+            Collectable(
+                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                base_image_path="potion.png",
+                dimensions=(15, 15),
+                rarity=0.5,
+                heal_value=100,
+            )
+            for _ in range(5)
         ]
 
     def change_hero(self, role: str) -> None:
@@ -152,6 +169,14 @@ class GameData:
             # Keep a constant FPS rate
             self.clock.tick(self.fps)
 
+    def volume_control(self, direction: str) -> None:
+        """Change main base volume for each button click."""
+        if direction == "up":
+            self.base_volume = self.base_volume + 0.1
+        elif direction == "down":
+            self.base_volume = self.base_volume - 0.1
+        sound.volume(self.base_volume)
+
     def game_loop(self) -> str:
         """Run each iteration of the game at a constant frame rate."""
         total_enemies = len(self.enemies)
@@ -185,6 +210,15 @@ class GameData:
             self.hero.display_health_bar(self.screen, self.blit_offset)
             self.hero.move(self.game_room.walls)
             self.hero.update_image()
+
+            remaining_potions = []
+            for potion in self.potions:
+                self.draw(potion.image, potion.rect)
+                if self.hero.is_colliding(potion):
+                    self.hero.heal(potion.heal_value)
+                else:
+                    remaining_potions.append(potion)
+            self.potions = remaining_potions
 
             # For each enemy
             alive_enemies = []

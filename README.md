@@ -3,11 +3,24 @@
 This repository will contain all code regarding the "software project" curricular unit of fall 2022.
 
 
-| Directory        | Description                     |        Status        |
-|------------------|---------------------------------|:--------------------:|
-| src              | Open world online RPG           |      :warning:       |
-| mini-quests/lab1 | Simple CLI-based adventure game |  :heavy_check_mark:  |
-| mini-quests/lab2 | Improved version of Lab1        |      :warning:       |
+| Directory        | Description                     |       Status       |
+|------------------|---------------------------------|:------------------:|
+| src              | Online RPG                      |     :warning:      |
+| mini-quests/lab1 | Simple CLI-based adventure game | :heavy_check_mark: |
+| mini-quests/lab2 | Improved version of Lab1        | :heavy_check_mark: |
+
+---
+
+## Installation
+
+**Easiest option**: Download a compiled binary for your operating system, that can found under the "Releases" section. Then, click the downloaded file to run the game.
+
+**Do it yourself**: You can also run the scripts directly if you have Python 3.8+ and pip installed on your system. 
+ - Clone this repository (either via git clone or by downloading a zip file)
+ - Run `pip install -r requirements.txt` on the base directory of the repository
+ - Then run `python src/main.py` to run the game
+
+**Compiling**: If you want to generate an executable, do the steps above and run `pyinstaller feupscape.spec`. The resulting binary can be found under the `dist/` folder.
 
 ---
 
@@ -20,16 +33,16 @@ This repository will contain all code regarding the "software project" curricula
 |   1    | Oct 16 | Product Backlog (User Stories)  | :heavy_check_mark: |
 |   1    | Oct 16 | Class Diagram                   | :heavy_check_mark: |
 |   2    | Oct 30 | UI Mockups                      | :heavy_check_mark: |
-|   2    | Oct 30 | Acceptance Tests                |     :warning:      |
+|   2    | Oct 30 | Acceptance Tests                | :heavy_check_mark: |
 |   2    | Oct 30 | Sprint #2 (review and planning) | :heavy_check_mark: |
 |   3    | Oct 30 | Sprint #3 (review and planning) | :heavy_check_mark: |
 |   4    | Nov 13 | Component/Package Diagram       |        :x:         |
 |   4    | Nov 13 | Deployment Diagram              |        :x:         |
 |   4    | Nov 13 | State Diagram                   |        :x:         |
-|   4    | Nov 13 | Sequence Diagram                |        :x:         |
-|   4    | Nov 13 | Sprint #4 (review and planning) |        :x:         |
+|   4    | Nov 13 | Sequence Diagram                | :heavy_check_mark: |
+|   4    | Nov 13 | Sprint #4 (review and planning) | :heavy_check_mark: |
 |   5    | Nov 27 | Source Code / Gitlab mng.       |        :x:         |
-|   5    | Nov 27 | Unit Tests                      |        :x:         |
+|   5    | Nov 27 | Unit Tests                      | :heavy_check_mark: |
 |   5    | Nov 27 | Sprint #5 (review and planning) |        :x:         |
 | Final  | Dec 11 | Installation Instructions       |        :x:         |
 | Final  | Dec 11 | User Manual                     |        :x:         |

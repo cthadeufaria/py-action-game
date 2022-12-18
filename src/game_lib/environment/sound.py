@@ -34,8 +34,14 @@ mouseover = get_sound_file("mouseover.mp3")
 death_cry = get_sound_file("death_cry.mp3")
 completed_boss = get_sound_file("completed_boss.mp3")
 
+
 # Adjust volumes
-hero_effects_channel.set_volume(0.9)
+def volume(base_volume: float) -> None:
+    soundtrack_channel.set_volume(base_volume)
+    hero_effects_channel.set_volume(base_volume)
+    enemy_effects_channel.set_volume(base_volume)
+    special_effects_channel.set_volume(base_volume)
+
 
 # play sound
 soundtrack_channel.play(soundtrack, loops=-1)  # Repeat forever

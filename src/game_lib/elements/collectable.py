@@ -11,8 +11,10 @@ class Collectable(Element):
         position: Tuple[int, int],
         base_image_path: str,
         dimensions: Tuple[int, int],
+        heal_value: int,
         rarity: float,
     ) -> None:
         """Initialize Collectable instance."""
-        self.rarity = rarity
         super().__init__(position, base_image_path, dimensions)
+        self.rarity = rarity
+        self.heal_value = heal_value

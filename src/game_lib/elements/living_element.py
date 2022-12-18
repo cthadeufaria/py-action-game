@@ -69,7 +69,7 @@ class LivingElement(MovingElement):
 
     def heal(self, hp: int) -> None:
         """Heal living element increasing health points."""
-        pass
+        self.health_points = min(self.max_health_points, self.health_points + hp)
 
     def update_image(self) -> None:
         """Set element's image base on its current state."""
