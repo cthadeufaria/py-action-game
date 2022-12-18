@@ -5,8 +5,9 @@ from .room import Room
 from ..elements.collectable import Collectable
 from ..elements.hero import Hero
 from ..elements.enemy import Enemy
-from random import randint, random
+from random import randint, random, choice
 from constants.heroes import heroes
+from constants.enemies import enemies
 from constants.buttons import menus, menu_type
 import game_lib.environment.sound as sound
 
@@ -58,32 +59,55 @@ class GameData:
         w, h = self.game_room.map_rect.w, self.game_room.map_rect.h
         self.temp_tile_size = 10
 
-        # Initialize 40 randomly instantiated enemies
+        # Initialize randomly instantiated enemies
         # TODO: perhaps select difficulty level at the beginning and generate more/less enemies
         self.enemies = [
-            Enemy(
-                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+            Enemy(  # Final boss
+                position=(4 * w // 5, h // 2),
                 role="minotaur",
-                dimensions=(80, 80),
-                base_speed=randint(5, 12),
-                health_points=10,
-                attack_force=1,
-                rarity=0.5,
-                is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
+                dimensions=(400, 400),
+                base_speed=2,
+                health_points=300,
+                attack_force=30,
+                is_follower=True,
                 can_fly=False,
-            )
-            for _ in range(10)
+            ),
+            *[  # All other enemies
+                Enemy(
+                    position=(
+                        choice(
+                            [  # Position it either in chamber 1 or chamber 2
+                                (randint(930, 3730), randint(360, 840)),
+                                (randint(5040, 5450), randint(210, 1490)),
+                            ]
+                        )
+                    ),
+                    role=enemy_role,
+                    dimensions=enemies[enemy_role]["dimensions"],
+                    base_speed=enemies[enemy_role]["base_speed"],
+                    health_points=enemies[enemy_role]["health_points"],
+                    attack_force=enemies[enemy_role]["attack_force"],
+                    is_follower=random() < enemies[enemy_role]["following_probability"],
+                    can_fly=enemies[enemy_role]["can_fly"],
+                )
+                for enemy_role in enemies.keys()
+                for _ in range(enemies[enemy_role]["number"])
+            ],
         ]
 
-        # Initialize 5 randomly instantiated potions
+        # Initialize 3 randomly positioned potions in each chamber
         self.potions = [
             Collectable(
-                position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
+                position=[  # Position it either in chamber 1 or chamber 2
+                    (randint(930, 3730), randint(360, 840)),
+                    (randint(5040, 5450), randint(210, 1490)),
+                ][chamber_index],
                 base_image_path="potion.png",
-                dimensions=(15, 15),
+                dimensions=(35, 35),
                 rarity=0.5,
-                heal_value=100,
+                heal_value=randint(100, 300),
             )
+            for chamber_index in range(2)
             for _ in range(5)
         ]
 
@@ -180,6 +204,7 @@ class GameData:
     def game_loop(self) -> str:
         """Run each iteration of the game at a constant frame rate."""
         total_enemies = len(self.enemies)
+        active_projectiles = []
         while True:
             for event in pygame.event.get():
                 # Check if user clicks X button in window
@@ -211,8 +236,16 @@ class GameData:
             self.hero.move(self.game_room.walls)
             self.hero.update_image()
 
+            # Generate shots
+            if self.hero.is_shooter:
+                new_projectile = self.hero.shoot()
+                if new_projectile:
+                    active_projectiles.append(new_projectile)
+
+            # For each potion
             remaining_potions = []
             for potion in self.potions:
+                # Draw and update it
                 self.draw(potion.image, potion.rect)
                 if self.hero.is_colliding(potion):
                     self.hero.heal(potion.heal_value)
@@ -232,9 +265,16 @@ class GameData:
                     self.draw(enemy.image, enemy.rect)
 
                 enemy.update_movement(self.hero)
+                enemy.move(self.game_room.walls)
 
                 # Check for attacks against hero
                 self.hero.check_attack(enemy, enemy.attack_force)
+
+                # Check for projectiles colliding with enemy
+                for projectile in active_projectiles:
+                    if projectile.is_colliding(enemy):
+                        enemy.get_damage(projectile.attack_force)
+                        projectile.is_active = False
 
                 enemy.display_health_bar(self.screen, self.blit_offset)
                 enemy.update_image()
@@ -244,6 +284,26 @@ class GameData:
 
             self.enemies = alive_enemies
 
+            # Update and display each projectile
+            remaining_projectiles = []
+            for projectile in active_projectiles:
+                projectile.move([])
+                if (
+                    projectile.rect.x > self.game_room.map_rect.w
+                    or projectile.rect.x < 0
+                ):
+                    projectile.is_active = False
+                self.draw(
+                    pygame.transform.flip(
+                        projectile.image, sum(projectile.velocity) == -1, False
+                    ),
+                    projectile.rect,
+                )
+                if projectile.is_active:
+                    remaining_projectiles.append(projectile)
+            active_projectiles = remaining_projectiles
+
+            # Position invisible walls relative to the player
             self.game_room.position_walls(self.screen, self.hero)
 
             # Display stamina

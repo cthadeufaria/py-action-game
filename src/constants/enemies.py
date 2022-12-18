@@ -1,0 +1,58 @@
+"""Constants for storing different classes of enemies that will be present on the map."""
+
+enemies = {
+    "bat": {
+        "number": 20,
+        "dimensions": (80, 80),
+        "base_speed": 12,
+        "health_points": 10,
+        "attack_force": 1,
+        "can_fly": True,
+        "following_probability": 0.2,
+    },
+    "goblin_1": {
+        "number": 5,
+        "dimensions": (100, 100),
+        "base_speed": 10,
+        "health_points": 25,
+        "attack_force": 3,
+        "can_fly": False,
+        "following_probability": 0.1,
+    },
+    "goblin_2": {
+        "number": 5,
+        "dimensions": (100, 100),
+        "base_speed": 10,
+        "health_points": 30,
+        "attack_force": 5,
+        "can_fly": False,
+        "following_probability": 0.5,
+    },
+    "goblin_3": {
+        "number": 10,
+        "dimensions": (100, 100),
+        "base_speed": 10,
+        "health_points": 25,
+        "attack_force": 3,
+        "can_fly": False,
+        "following_probability": 0.3,
+    },
+    "small_minotaur": {
+        "number": 6,
+        "dimensions": (200, 200),
+        "base_speed": 3,
+        "health_points": 100,
+        "attack_force": 10,
+        "can_fly": False,
+        "following_probability": 0.75,
+    },
+    "skeleton": {
+        "number": 12,
+        "dimensions": (100, 100),
+        "base_speed": 5,
+        "health_points": 30,
+        "attack_force": 8,
+        "can_fly": False,
+        "following_probability": 0.5,
+    },
+}

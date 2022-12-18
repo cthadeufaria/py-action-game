@@ -2,6 +2,7 @@
 from typing import Tuple
 from .living_element import LivingElement
 from .equipable import Equipable
+from .projectile import Projectile
 from constants.living_states import IDLE, WALK, ATTACK, DIE
 from constants.colors import BLACK, RED, GREEN
 from ..environment.sound import hero_cry
@@ -34,6 +35,8 @@ class Hero(LivingElement):
         self.max_stamina = stamina
         self.stamina = stamina
         self.is_recovering = False
+        self.is_shooter = role in ["ranger", "wizard"]
+        self.projectile_image = f"{role}_projectile.png" if self.is_shooter else None
 
         # TODO: change/refactor to simpler weapon structure
         self.current_weapon = Equipable(
@@ -98,14 +101,29 @@ class Hero(LivingElement):
 
     def check_attack(self, opponent: "LivingElement", attack_force: int) -> None:
         """Check if attacked and decrease health points."""
-        if self.is_colliding(opponent):
+        if self.is_colliding(opponent) and not opponent.state == DIE:
             opponent.state = ATTACK
             if self.state == ATTACK:
                 opponent.get_damage(self.current_weapon.attack_force)
-            else:
+            elif opponent.state_idx == 6:
                 self.get_damage(attack_force)
                 self.cooldown_frames = 8
                 hero_cry()
+
+    def shoot(self) -> Projectile | None:
+        if self.state == ATTACK and self.state_idx == 6 and self.state_cooldown == 0:
+            return Projectile(
+                position=self.rect.midleft
+                if self.is_going_left
+                else self.rect.midright,
+                dimensions=(60, 15),
+                attack_force=self.current_weapon.attack_force,
+                base_image_path=self.projectile_image,
+                velocity=(-1, 0) if self.is_going_left else (1, 0),
+                base_speed=12,
+            )
+        else:
+            return None
 
     def display_stamina_bar(self, screen: pygame.surface.Surface) -> None:
         """Draw a bar on screen that represents current hero stamina."""

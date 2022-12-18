@@ -77,6 +77,7 @@ class LivingElement(MovingElement):
         if self.state_cooldown == 2:
             # Determine next state based on previous state
             if self.health_points == 0:
+                self.velocity = (0, 0)
                 self.state = DIE
             elif self.state == ATTACK and self.state_idx == NUM_STATES - 1:
                 self.state = IDLE

@@ -19,7 +19,6 @@ class Enemy(LivingElement):
         can_fly: bool,
         health_points: int,
         attack_force: int,
-        rarity: float,
         is_follower: bool,
     ) -> None:
         """Initialize Enemy instance."""
@@ -32,7 +31,6 @@ class Enemy(LivingElement):
             can_fly,
         )
         self.attack_force = attack_force
-        self.rarity = rarity
         self.is_follower = is_follower
         self.target = (0, 0)
         self.num_steps = 0
@@ -89,5 +87,3 @@ class Enemy(LivingElement):
             self.is_going_left = True
         elif self.velocity[0] > 0:
             self.is_going_left = False
-
-        self.move([])
