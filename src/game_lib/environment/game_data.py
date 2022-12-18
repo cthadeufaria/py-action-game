@@ -29,7 +29,6 @@ class GameData:
         self.bg_color = bg_color
         self.font = font
 
-
         # Init temporary / default Hero
         self.hero = Hero(
             position=(800, 500),
@@ -217,7 +216,6 @@ class GameData:
                 else:
                     remaining_potions.append(potion)
             self.potions = remaining_potions
-
 
             # For each enemy
             alive_enemies = []

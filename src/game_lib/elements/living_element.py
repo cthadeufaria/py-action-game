@@ -58,8 +58,6 @@ class LivingElement(MovingElement):
         else:
             self.health_points += hp
 
-
-
     def display_health_bar(
         self, screen: pygame.surface.Surface, offset: Tuple[int, int]
     ) -> None:
@@ -89,4 +87,3 @@ class LivingElement(MovingElement):
                 bar_size[1] - 2,
             ),
         )
-

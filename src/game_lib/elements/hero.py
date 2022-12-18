@@ -42,7 +42,9 @@ class Hero(LivingElement):
         self.is_recovering = False
 
         # TODO: change/refactor to simpler weapon structure
-        self.current_weapon = Equipable(position, ["ball.png"], (10, 10), 0.1, base_attack, 1)
+        self.current_weapon = Equipable(
+            position, ["ball.png"], (10, 10), 0.1, base_attack, 1
+        )
         self.inventory: list[Equipable] = []
 
     def equip(self, eq_number: int) -> None:
