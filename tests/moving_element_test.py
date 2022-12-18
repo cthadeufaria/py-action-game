@@ -12,7 +12,9 @@ pygame.display.set_mode((2000, 2000), pygame.NOFRAME)
 
 top_wall = Element(position=(0, 0), base_image_path="ball.png", dimensions=(100, 20))
 right_wall = Element(position=(80, 0), base_image_path="ball.png", dimensions=(20, 100))
-bottom_wall = Element(position=(0, 80), base_image_path="ball.png", dimensions=(100, 20))
+bottom_wall = Element(
+    position=(0, 80), base_image_path="ball.png", dimensions=(100, 20)
+)
 left_wall = Element(position=(0, 0), base_image_path="ball.png", dimensions=(20, 100))
 
 collision_paths = {

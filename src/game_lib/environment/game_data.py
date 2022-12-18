@@ -11,7 +11,7 @@ from ..utils.engine import load_png
 from constants.heroes import heroes
 from constants.enemies import enemies
 from constants.buttons import menus, menu_type
-import game_lib.environment.sound as sound
+from ..utils.sound import set_volume, play_soundtrack
 
 
 class GameData:
@@ -223,12 +223,13 @@ class GameData:
             self.base_volume = self.base_volume + 0.1
         elif direction == "down":
             self.base_volume = self.base_volume - 0.1
-        sound.volume(self.base_volume)
+        set_volume(self.base_volume)
 
     def game_loop(self) -> str:
         """Run each iteration of the game at a constant frame rate."""
         total_enemies = len(self.enemies)
         active_projectiles = []
+        play_soundtrack()
         while True:
             for event in pygame.event.get():
                 # Check if user clicks X button in window

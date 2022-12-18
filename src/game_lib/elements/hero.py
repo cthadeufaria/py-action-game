@@ -5,7 +5,7 @@ from .equipable import Equipable
 from .projectile import Projectile
 from constants.living_states import IDLE, WALK, ATTACK, DIE
 from constants.colors import BLACK, RED, GREEN
-from ..environment.sound import hero_cry
+from ..utils.sound import hero_cry
 import pygame.key
 from math import sqrt
 

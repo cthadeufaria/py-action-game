@@ -5,7 +5,7 @@ This repository will contain all code regarding the "software project" curricula
 
 | Directory        | Description                     |       Status       |
 |------------------|---------------------------------|:------------------:|
-| src              | Online RPG                      |     :warning:      |
+| src              | Online RPG                      | :heavy_check_mark: |
 | mini-quests/lab1 | Simple CLI-based adventure game | :heavy_check_mark: |
 | mini-quests/lab2 | Improved version of Lab1        | :heavy_check_mark: |
 
@@ -36,18 +36,18 @@ This repository will contain all code regarding the "software project" curricula
 |   2    | Oct 30 | Acceptance Tests                | :heavy_check_mark: |
 |   2    | Oct 30 | Sprint #2 (review and planning) | :heavy_check_mark: |
 |   3    | Oct 30 | Sprint #3 (review and planning) | :heavy_check_mark: |
-|   4    | Nov 13 | Component/Package Diagram       |        :x:         |
-|   4    | Nov 13 | Deployment Diagram              |        :x:         |
-|   4    | Nov 13 | State Diagram                   |        :x:         |
+|   4    | Nov 13 | Component/Package Diagram       | :heavy_check_mark: |
+|   4    | Nov 13 | Deployment Diagram              | :heavy_check_mark: |
+|   4    | Nov 13 | State Diagram                   | :heavy_check_mark: |
 |   4    | Nov 13 | Sequence Diagram                | :heavy_check_mark: |
 |   4    | Nov 13 | Sprint #4 (review and planning) | :heavy_check_mark: |
-|   5    | Nov 27 | Source Code / Gitlab mng.       |        :x:         |
+|   5    | Nov 27 | Source Code / Gitlab mng.       | :heavy_check_mark: |
 |   5    | Nov 27 | Unit Tests                      | :heavy_check_mark: |
-|   5    | Nov 27 | Sprint #5 (review and planning) |        :x:         |
-| Final  | Dec 11 | Installation Instructions       |        :x:         |
-| Final  | Dec 11 | User Manual                     |        :x:         |
-| Final  | Dec 11 | Product Complexity / Features   |        :x:         |
-| Final  | Dec 11 | Product Delivery (presentation) |        :x:         |
+|   5    | Nov 27 | Sprint #5 (review and planning) | :heavy_check_mark: |
+| Final  | Dec 11 | Installation Instructions       | :heavy_check_mark: |
+| Final  | Dec 11 | User Manual                     | :heavy_check_mark: |
+| Final  | Dec 11 | Product Complexity / Features   | :heavy_check_mark: |
+| Final  | Dec 11 | Product Delivery (presentation) | :heavy_check_mark: |
 
 ## Contribution guide
  - Object-Oriented Programming
