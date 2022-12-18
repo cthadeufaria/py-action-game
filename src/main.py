@@ -23,7 +23,7 @@ pygame.init()
 # Set window name, size and default font
 pygame.display.set_caption("FEUPscape")
 screen = pygame.display.set_mode(constants.screen.dimensions["medium"])
-font = pygame.font.Font(get_absolute_path(__file__, "assets", "wonder.ttf"), 25)
+font = pygame.font.Font(get_absolute_path(__file__, "assets", "pixeboy.ttf"), 30)
 
 # Create clock for game loop
 clock = pygame.time.Clock()

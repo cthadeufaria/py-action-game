@@ -36,7 +36,7 @@ class Hero(LivingElement):
         self.stamina = stamina
         self.is_recovering = False
         self.is_shooter = role in ["ranger", "wizard"]
-        self.projectile_image = f"{role}_projectile.png" if self.is_shooter else None
+        self.projectile_image = f"{role}_projectile.png"
 
         # TODO: change/refactor to simpler weapon structure
         self.current_weapon = Equipable(
@@ -111,6 +111,7 @@ class Hero(LivingElement):
                 hero_cry()
 
     def shoot(self) -> Projectile | None:
+        """Create a new Projectile object on the game map."""
         if self.state == ATTACK and self.state_idx == 6 and self.state_cooldown == 0:
             return Projectile(
                 position=self.rect.midleft
@@ -128,7 +129,7 @@ class Hero(LivingElement):
     def display_stamina_bar(self, screen: pygame.surface.Surface) -> None:
         """Draw a bar on screen that represents current hero stamina."""
         bar_size = (100, 20)
-        stamina_bar_rect = pygame.Rect(200, 15, *bar_size)
+        stamina_bar_rect = pygame.Rect(120, 10, *bar_size)
         pygame.draw.rect(
             screen, RED, (stamina_bar_rect.x, stamina_bar_rect.y, *bar_size)
         )

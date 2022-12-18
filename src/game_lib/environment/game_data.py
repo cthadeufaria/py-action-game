@@ -1,5 +1,5 @@
 """Class that stores state of the game environment."""
-from typing import Tuple
+from typing import Tuple, TypedDict
 import pygame
 from .room import Room
 from ..elements.collectable import Collectable
@@ -60,7 +60,19 @@ class GameData:
         self.temp_tile_size = 10
 
         # Initialize randomly instantiated enemies
-        # TODO: perhaps select difficulty level at the beginning and generate more/less enemies
+        enemies_type = TypedDict(
+            "enemies_type",
+            {
+                "number": int,
+                "dimensions": Tuple[int, int],
+                "base_speed": int,
+                "health_points": int,
+                "attack_force": int,
+                "can_fly": bool,
+                "following_probability": float,
+            },
+        )
+        enemies_dict: dict[str, enemies_type] = enemies
         self.enemies = [
             Enemy(  # Final boss
                 position=(4 * w // 5, h // 2),
@@ -83,15 +95,16 @@ class GameData:
                         )
                     ),
                     role=enemy_role,
-                    dimensions=enemies[enemy_role]["dimensions"],
-                    base_speed=enemies[enemy_role]["base_speed"],
-                    health_points=enemies[enemy_role]["health_points"],
-                    attack_force=enemies[enemy_role]["attack_force"],
-                    is_follower=random() < enemies[enemy_role]["following_probability"],
-                    can_fly=enemies[enemy_role]["can_fly"],
+                    dimensions=enemies_dict[enemy_role]["dimensions"],
+                    base_speed=enemies_dict[enemy_role]["base_speed"],
+                    health_points=enemies_dict[enemy_role]["health_points"],
+                    attack_force=enemies_dict[enemy_role]["attack_force"],
+                    is_follower=random()
+                    < enemies_dict[enemy_role]["following_probability"],
+                    can_fly=enemies_dict[enemy_role]["can_fly"],
                 )
-                for enemy_role in enemies.keys()
-                for _ in range(enemies[enemy_role]["number"])
+                for enemy_role in enemies_dict.keys()
+                for _ in range(enemies_dict[enemy_role]["number"])
             ],
         ]
 
@@ -108,7 +121,7 @@ class GameData:
                 heal_value=randint(100, 300),
             )
             for chamber_index in range(2)
-            for _ in range(5)
+            for _ in range(3)
         ]
 
     def change_hero(self, role: str) -> None:
@@ -307,7 +320,7 @@ class GameData:
             self.game_room.position_walls(self.screen, self.hero)
 
             # Display stamina
-            self.screen.blit(self.font.render("Stamina", True, "White"), (10, 10))
+            self.screen.blit(self.font.render("Stamina", True, "Red"), (10, 10))
             self.hero.display_stamina_bar(self.screen)
 
             # Display points
@@ -315,7 +328,7 @@ class GameData:
                 self.font.render(
                     f"Points {5 * (total_enemies - len(self.enemies))}", True, "White"
                 ),
-                (self.screen.get_width() - 400, self.screen.get_height() - 50),
+                (self.screen.get_width() - 200, self.screen.get_height() - 50),
             )
 
             # Update screen with recently drawn elements
