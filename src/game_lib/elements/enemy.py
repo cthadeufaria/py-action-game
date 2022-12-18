@@ -4,6 +4,7 @@ from random import randint, random
 from .living_element import LivingElement
 from ..utils.math import check_inside_circle
 from .hero import Hero
+from constants.living_states import IDLE, WALK, DIE
 
 
 class Enemy(LivingElement):
@@ -12,28 +13,22 @@ class Enemy(LivingElement):
     def __init__(
         self,
         position: Tuple[int, int],
-        image_paths: list[str],
+        role: str,
         dimensions: Tuple[int, int],
         base_speed: int,
         can_fly: bool,
         health_points: int,
-        damage_image: str,
-        idle_image: str,
         attack_force: int,
         rarity: float,
         is_follower: bool,
-        attack_image: str,
     ) -> None:
         """Initialize Enemy instance."""
         super().__init__(
             position,
-            image_paths,
+            role,
             dimensions,
             base_speed,
             health_points,
-            damage_image,
-            idle_image,
-            attack_image,
             can_fly,
         )
         self.attack_force = attack_force
@@ -46,11 +41,20 @@ class Enemy(LivingElement):
 
     def update_movement(self, hero: Hero) -> None:
         """Update enemy's position depending on its attributes."""
+        # Dead enemies no not move
+        if self.state == DIE:
+            return
+
         # If enemy is a follower and player is inside radius, go towards player
-        if self.is_follower and check_inside_circle(
-            hero.rect.center, self.initial_pos, self.walking_radius
-        ):
-            self.target = (hero.rect.centerx, hero.rect.centery)
+        if self.is_follower:
+            if check_inside_circle(
+                hero.rect.center, self.initial_pos, self.walking_radius
+            ):
+                self.target = (hero.rect.centerx, hero.rect.centery)
+            else:
+                self.target = self.rect.center
+                if self.state == WALK:
+                    self.state = IDLE
 
         # If enemy is a wanderer or player is outside radius, walk randomly inside radius
         elif self.num_steps == 0:
@@ -72,9 +76,18 @@ class Enemy(LivingElement):
             ** 0.5,
         )
 
+        if norm_v > 0.001:
+            self.state = WALK
+
         self.velocity = (
             (self.target[0] - self.rect.centerx) / norm_v,
             (self.target[1] - self.rect.centery) / norm_v,
         )
+
+        # Face correct side when velocity changes
+        if self.velocity[0] < 0:
+            self.is_going_left = True
+        elif self.velocity[0] > 0:
+            self.is_going_left = False
 
         self.move([])

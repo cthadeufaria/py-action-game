@@ -9,7 +9,7 @@ class Projectile(MovingElement):
     def __init__(
         self,
         position: Tuple[int, int],
-        image_paths: list[str],
+        base_image_path: str,
         dimensions: Tuple[int, int],
         base_speed: int,
         velocity: Tuple[int, int],
@@ -17,5 +17,5 @@ class Projectile(MovingElement):
     ) -> None:
         """Initialize Projectile instance."""
         self.attack_force = attack_force
-        super().__init__(position, image_paths, dimensions, base_speed)
+        super().__init__(position, base_image_path, dimensions, base_speed)
         self.velocity = velocity

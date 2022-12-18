@@ -22,13 +22,13 @@ heroes = {
     "rogue": {
         "base_speed": 4,
         "health_points": 300,
-        "stamina": 200,
+        "stamina": 100,
         "base_attack": 5,
     },
     "wizard": {
         "base_speed": 3,
         "health_points": 400,
-        "stamina": 350,
+        "stamina": 300,
         "base_attack": 15,
     },
 }

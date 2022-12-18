@@ -2,7 +2,7 @@
 from typing import Tuple
 from .living_element import LivingElement
 from .equipable import Equipable
-from constants.living_states import IDLE, REST, WALK, ATTACK, DIE, state_str
+from constants.living_states import IDLE, WALK, ATTACK, DIE
 from constants.colors import BLACK, RED, GREEN
 from ..environment.sound import hero_cry
 import pygame.key
@@ -15,36 +15,29 @@ class Hero(LivingElement):
     def __init__(
         self,
         position: Tuple[int, int],
-        image_paths: list[str],
+        role: str,
         dimensions: Tuple[int, int],
         base_speed: int,
         health_points: int,
         stamina: int,
         base_attack: int,
-        damage_image: str,
-        idle_image: str,
-        attack_image: str,
     ) -> None:
         """Initialize Hero instance."""
         super().__init__(
             position,
-            image_paths,
+            role,
             dimensions,
             base_speed,
             health_points,
-            damage_image,
-            idle_image,
-            attack_image,
         )
         self.state = IDLE
-        self.is_going_left = False
         self.max_stamina = stamina
         self.stamina = stamina
         self.is_recovering = False
 
         # TODO: change/refactor to simpler weapon structure
         self.current_weapon = Equipable(
-            position, ["ball.png"], (10, 10), 0.1, base_attack, 1
+            position, "ball.png", (10, 10), 0.1, base_attack, 1
         )
         self.inventory: list[Equipable] = []
 
@@ -54,6 +47,10 @@ class Hero(LivingElement):
 
     def get_input(self) -> None:
         """Change speed velocity based on keys pressed."""
+        # Dead heroes should not move
+        if self.state == DIE:
+            return
+
         keys = pygame.key.get_pressed()
 
         # Press period key to run
@@ -70,7 +67,6 @@ class Hero(LivingElement):
         # Allow moving with WASD or arrow keys
         if keys[pygame.K_UP] or keys[pygame.K_w]:
             vy = -mod_speed
-            # TODO: set integer value to select image in array
             self.is_going_left = False
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             vx = mod_speed
@@ -83,42 +79,33 @@ class Hero(LivingElement):
             self.is_going_left = True
 
         # Verify if hero wants to attack
-        self.state = ATTACK if keys[pygame.K_v] else IDLE
-
-        if self.state == ATTACK:
-            self.image = self.attack_image
-        else:
-            self.image = self.idle_image
+        if keys[pygame.K_v]:
+            self.state = ATTACK
 
         # Assign velocity, and normalize if necessary
         self.velocity = (vx, vy)
         if vx != 0 and vy != 0:
-            self.state = WALK
             self.velocity = (
                 round(mod_speed * vx / sqrt(vx**2 + vy**2)),
                 round(mod_speed * vy / sqrt(vx**2 + vy**2)),
             )
 
+        # Assign walking state
+        if vx != 0 or vy != 0:
+            self.state = WALK
+        elif self.state == WALK:
+            self.state = IDLE
+
     def check_attack(self, opponent: "LivingElement", attack_force: int) -> None:
         """Check if attacked and decrease health points."""
         if self.is_colliding(opponent):
+            opponent.state = ATTACK
             if self.state == ATTACK:
-                opponent.image = opponent.damage_image
                 opponent.get_damage(self.current_weapon.attack_force)
             else:
                 self.get_damage(attack_force)
-                opponent.image = opponent.idle_image
-                self.image = self.damage_image
                 self.cooldown_frames = 8
                 hero_cry()
-
-        # Return to idle image when cooldown is reached
-        if self.state == ATTACK:
-            self.image = self.attack_image
-        elif self.cooldown_frames == 0:
-            self.image = self.idle_image
-        else:
-            self.cooldown_frames -= 1
 
     def display_stamina_bar(self, screen: pygame.surface.Surface) -> None:
         """Draw a bar on screen that represents current hero stamina."""

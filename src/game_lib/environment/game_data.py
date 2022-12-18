@@ -1,5 +1,4 @@
 """Class that stores state of the game environment."""
-import os.path
 from typing import Tuple
 import pygame
 from .room import Room
@@ -31,15 +30,12 @@ class GameData:
         # Init temporary / default Hero
         self.hero = Hero(
             position=(800, 500),
-            image_paths=["orc.png"],
+            role="orc",
             dimensions=(3 * 32, 3 * 32),
             base_speed=3,
             health_points=400,
             stamina=400,
             base_attack=10,
-            damage_image="orc_dmg.png",
-            idle_image="orc.png",
-            attack_image="orc_atk.png",
         )
 
         # Set offset when drawing elements on screen relative to the hero
@@ -62,34 +58,28 @@ class GameData:
         self.enemies = [
             Enemy(
                 position=(randint(w // 8, 7 * w // 8), randint(h // 3, 2 * h // 3)),
-                image_paths=["bat.png", "bat_dmg.png"],
-                dimensions=(40, 40),
+                role="minotaur",
+                dimensions=(80, 80),
                 base_speed=randint(5, 12),
                 health_points=10,
-                damage_image="bat_dmg.png",
-                idle_image="bat.png",
-                attack_image="bat.png",
                 attack_force=1,
                 rarity=0.5,
                 is_follower=(3 * random()) < 1,  # Only occurs 33% of the time
-                can_fly=True,
+                can_fly=False,
             )
-            for _ in range(40)
+            for _ in range(10)
         ]
 
     def change_hero(self, role: str) -> None:
         """Create new hero object based on selected role."""
         self.hero = Hero(
             position=(800, 500),
-            image_paths=[os.path.join("heroes", role, "male", "walk_0.png")],
+            role=role,
             dimensions=(3 * 32, 3 * 32),
             base_speed=heroes[role]["base_speed"],
             health_points=heroes[role]["health_points"],
             stamina=heroes[role]["stamina"],
             base_attack=heroes[role]["base_attack"],
-            damage_image=os.path.join("heroes", role, "male", "die_3.png"),
-            idle_image=os.path.join("heroes", role, "male", "walk_3.png"),
-            attack_image=os.path.join("heroes", role, "male", "attack_3.png"),
         )
 
     def menu_loop(self, menu_name: str) -> str:
@@ -192,20 +182,28 @@ class GameData:
                 self.draw(self.hero.image, self.hero.rect)
 
             self.hero.get_input()
-            self.hero.move(self.game_room.walls)
             self.hero.display_health_bar(self.screen, self.blit_offset)
+            self.hero.move(self.game_room.walls)
+            self.hero.update_image()
 
             # For each enemy
             alive_enemies = []
             for enemy in self.enemies:
                 # Draw and update it
-                self.draw(enemy.image, enemy.rect)
+                if enemy.is_going_left:
+                    self.draw(
+                        pygame.transform.flip(enemy.image, True, False), enemy.rect
+                    )
+                else:
+                    self.draw(enemy.image, enemy.rect)
+
                 enemy.update_movement(self.hero)
 
                 # Check for attacks against hero
                 self.hero.check_attack(enemy, enemy.attack_force)
 
                 enemy.display_health_bar(self.screen, self.blit_offset)
+                enemy.update_image()
 
                 if not enemy.is_dead():
                     alive_enemies.append(enemy)
@@ -235,9 +233,9 @@ class GameData:
             # get pressed keys
             keys = pygame.key.get_pressed()
 
-            # Enter game over screen based on health_points value
-            if self.hero.health_points <= 0:
-                return "game over"
+            # Enter game over screen when player is dead
+            if self.hero.is_dead():
+                return "game_over"
 
             # Press escape key to enter pause menu
             elif keys[pygame.K_ESCAPE]:

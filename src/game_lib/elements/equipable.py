@@ -9,7 +9,7 @@ class Equipable(Collectable):
     def __init__(
         self,
         position: Tuple[int, int],
-        image_paths: list[str],
+        base_image_path: str,
         dimensions: Tuple[int, int],
         rarity: float,
         attack_force: int,
@@ -18,4 +18,4 @@ class Equipable(Collectable):
         """Initialize Equipable instance."""
         self.attack_force = attack_force
         self.weight = weight
-        super().__init__(position, image_paths, dimensions, rarity)
+        super().__init__(position, base_image_path, dimensions, rarity)

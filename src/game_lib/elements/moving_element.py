@@ -10,7 +10,7 @@ class MovingElement(Element):
     def __init__(
         self,
         position: Tuple[int, int],
-        image_paths: list[str],
+        base_image_path: str,
         dimensions: Tuple[int, int],
         base_speed: int,
         can_fly: bool = False,
@@ -19,7 +19,7 @@ class MovingElement(Element):
         self.base_speed = base_speed
         self.velocity = (0, 0)
         self.can_fly = can_fly
-        super().__init__(position, image_paths, dimensions)
+        super().__init__(position, base_image_path, dimensions)
 
     def move(self, walls: list[pygame.Rect]) -> None:
         """Update the position of rect based on current velocity."""
