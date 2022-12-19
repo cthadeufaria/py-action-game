@@ -4,7 +4,7 @@ import os.path
 from .engine import get_absolute_path
 
 # SORRY BOSS, STORING LOCALLY IS PRETTY UNSAFE, BUT I HAVE A DEADLINE
-credentials_path = get_absolute_path(".", "secret.json")
+credentials_path = "secret.json"
 
 
 def get_credentials() -> dict[str, str] | None:
