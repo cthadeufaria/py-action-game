@@ -2,6 +2,8 @@
 
 This repository will contain all code regarding the "software project" curricular unit of fall 2022.
 
+Here you can find the source code and binaries for the game **FEUPSCAPE**, an application that uses databases, has GUI and implements a client-server architecture, as required.
+
 
 | Directory        | Description                     |       Status       |
 |------------------|---------------------------------|:------------------:|
