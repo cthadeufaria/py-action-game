@@ -8,7 +8,7 @@ a = Analysis(
     ['src/main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/assets', 'assets'), ('src/constants', 'constants')],
+    datas=[('src/assets', 'assets'), ('src/game_lib/constants/walls.json', 'game_lib/constants')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
