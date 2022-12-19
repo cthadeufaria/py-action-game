@@ -1,10 +1,16 @@
 """Auxiliary functions to get and set data to/from credentials file."""
 import json
-import os.path
-from .engine import get_absolute_path
+import os
+import sys
+
+# Get path of current running application, both for executable and interactive mode
+if getattr(sys, "frozen", False):
+    application_path = os.path.dirname(os.path.realpath(sys.executable))
+else:
+    application_path = os.path.dirname(__file__)
 
 # SORRY BOSS, STORING LOCALLY IS PRETTY UNSAFE, BUT I HAVE A DEADLINE
-credentials_path = "secret.json"
+credentials_path = os.path.join(application_path, "secret.json")
 
 
 def get_credentials() -> dict[str, str] | None:

@@ -2,8 +2,8 @@
 from typing import Tuple
 from .moving_element import MovingElement
 from ..utils.engine import load_png
-from constants.living_states import IDLE, REST, ATTACK, DIE, state_str
-from constants.colors import BLACK, RED, GREEN
+from ..constants.living_states import IDLE, REST, ATTACK, DIE, state_str
+from ..constants.colors import BLACK, RED, GREEN
 import pygame
 import os
 

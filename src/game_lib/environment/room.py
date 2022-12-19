@@ -14,7 +14,7 @@ class Room:
         self.map_surface, self.map_rect = load_png(map_image_path)
 
         with open(
-            get_absolute_path(__file__, "..", "..", "constants", walls_file_path)
+            get_absolute_path(__file__, "..", "constants", walls_file_path)
         ) as walls_file:
             walls_grid = json.load(walls_file)
             self.walls: list[pygame.Rect] = []

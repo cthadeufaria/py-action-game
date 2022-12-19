@@ -8,9 +8,9 @@ from ..elements.hero import Hero
 from ..elements.enemy import Enemy
 from ..universal.auth_player import AuthPlayer
 from ..utils.engine import load_png
-from constants.heroes import heroes
-from constants.enemies import enemies
-from constants.buttons import menus, menu_type
+from ..constants.heroes import heroes
+from ..constants.enemies import enemies
+from ..constants.buttons import menus, menu_type
 from ..utils.sound import set_volume, play_soundtrack
 
 

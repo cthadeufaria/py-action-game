@@ -4,7 +4,8 @@ from random import randint, random
 from .living_element import LivingElement
 from ..utils.math import check_inside_circle
 from .hero import Hero
-from constants.living_states import IDLE, WALK, DIE
+from ..constants.living_states import IDLE, WALK, DIE
+from ..constants.screen import FPS
 
 
 class Enemy(LivingElement):
@@ -61,8 +62,8 @@ class Enemy(LivingElement):
                 self.initial_pos[1] + int((random() - 0.5) * self.walking_radius),
             )
 
-        # Only change target point every second (30 FPS) - TODO: get from constants
-        self.num_steps = (self.num_steps + 1) % 30
+        # Only change target point every second
+        self.num_steps = (self.num_steps + 1) % FPS
 
         # Update velocity towards target
         norm_v = max(

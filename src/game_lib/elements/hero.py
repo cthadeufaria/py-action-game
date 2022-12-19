@@ -3,8 +3,8 @@ from typing import Tuple
 from .living_element import LivingElement
 from .equipable import Equipable
 from .projectile import Projectile
-from constants.living_states import IDLE, WALK, ATTACK, DIE
-from constants.colors import BLACK, RED, GREEN
+from ..constants.living_states import IDLE, WALK, ATTACK, DIE
+from ..constants.colors import BLACK, RED, GREEN
 from ..utils.sound import hero_cry
 import pygame.key
 from math import sqrt

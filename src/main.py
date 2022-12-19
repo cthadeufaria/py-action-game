@@ -7,9 +7,7 @@ import os
 import pygame
 
 # Local imports
-import constants.colors
-import constants.screen
-from constants.heroes import heroes
+from game_lib.constants import screen, colors, heroes
 from game_lib.environment.game_data import GameData
 from game_lib.utils.engine import get_absolute_path
 from game_lib.utils.credentials import get_credentials, set_credentials
@@ -26,7 +24,7 @@ pygame.init()
 
 # Set window name, size and default font
 pygame.display.set_caption("FEUPscape")
-screen = pygame.display.set_mode(constants.screen.dimensions["medium"])
+game_screen = pygame.display.set_mode(screen.dimensions["medium"])
 font = pygame.font.Font(get_absolute_path(__file__, "assets", "pixeboy.ttf"), 30)
 
 # Create clock for game loop
@@ -41,7 +39,7 @@ if __name__ == "__main__":
     credentials = get_credentials()
     if not credentials:
         input_menu = InputCredentials(
-            screen=screen, clock=clock, font=font, fps=constants.screen.FPS
+            screen=game_screen, clock=clock, font=font, fps=screen.FPS
         )
         name, email, password = input_menu.input_loop()
         if not name or not email or not password:
@@ -64,10 +62,10 @@ if __name__ == "__main__":
     last_state = state
     selected_role = "orc"
     game = GameData(
-        screen=screen,
+        screen=game_screen,
         clock=clock,
-        fps=constants.screen.FPS,
-        bg_color=constants.colors.GRASS,
+        fps=screen.FPS,
+        bg_color=colors.GRASS,
         font=font,
         auth=auth,
     )
@@ -88,7 +86,7 @@ if __name__ == "__main__":
         elif state == "game_over":
             game.change_hero(selected_role)
             state = game.menu_loop("game_over_menu")
-        elif state in [h.lower() for h in heroes.keys()]:
+        elif state in [h.lower() for h in heroes.heroes.keys()]:
             selected_role = state
             game.change_hero(selected_role)
             state = "resume"
