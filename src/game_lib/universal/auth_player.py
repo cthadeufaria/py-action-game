@@ -1,6 +1,7 @@
 """Class that stores information about an authenticated user."""
 from typing import Tuple, TypedDict
 import firebase  # type: ignore
+import os
 
 ranking_type = TypedDict(
     "ranking_type", {"name": str, "points": int, "position": Tuple[int, int]}
@@ -20,10 +21,12 @@ class AuthPlayer:
             "id": {"name": "Hero", "points": 0, "position": (800, 500)}
         }
 
+        apiKey = os.getenv("api_key_firebase")
+
         # Initialize firestore client
         fb_client = firebase.Firebase(
             {
-                "apiKey": "AIzaSyC6fkyak3a9F4ozgj0XS7TQuQg3wxapbK8",
+                "apiKey": apiKey,
                 "authDomain": "feupscape.firebaseapp.com",
                 "databaseURL": "https://feupscape-default-rtdb.europe-west1.firebasedatabase.app",
                 "projectId": "feupscape",
